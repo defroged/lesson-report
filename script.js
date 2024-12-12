@@ -1,7 +1,12 @@
+window.onload = () => {
+    const passwordModal = document.getElementById('passwordModal');
+    passwordModal.style.display = 'flex'; // Ensure modal is visible
+};
+
 async function fetchData(password) {
     const spreadsheetId = "1ax9LCCUn1sT6ogfZ4sv9Qj9Nx6tdAB-lQ3JYxdHIF7U";
-    const apiKey = NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
-    const range = "Sheet1!A:M"; // Adjust if the sheet name or range is different
+    const apiKey = 'AIzaSyAGi58EWi-d5IrxvWkJuVY6ptplm93r4dU'; 
+    const range = "Sheet1!A:M"; 
     
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
     
