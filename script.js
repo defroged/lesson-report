@@ -14,15 +14,21 @@ async function fetchData(password) {
         const response = await fetch(url);
         const data = await response.json();
         
-        if (data.values) {
-            const rows = data.values.slice(1); // Skip the header row
-            const match = rows.find(row => row[12] === password); // Column M (index 12)
-            
-            return match ? match[1] : null; // Column B (index 1) is the class name
-        } else {
-            console.error("No data found in the spreadsheet.");
-            return null;
-        }
+        if (data && data.values) {
+    const rows = data.values.slice(1); // Skip the header row
+    const match = rows.find(row => row[12] && row[12].trim() === password.trim()); // Column M (index 12)
+    
+    if (match) {
+        return match[1] || "No class name provided"; // Column B (index 1) for class name
+    } else {
+        console.error("No matching row found for the provided password.");
+        return null;
+    }
+} else {
+    console.error("Invalid response structure or no data found in the spreadsheet.");
+    return null;
+}
+
     } catch (error) {
         console.error("Error fetching data:", error);
         return null;
