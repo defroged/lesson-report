@@ -9,11 +9,12 @@ async function fetchData(password) {
         
         if (!response.ok) {
     let errorMessage = 'Failed to fetch data.';
+    const clonedResponse = response.clone();
     try {
-        const errorData = await response.json();
+        const errorData = await clonedResponse.json();
         errorMessage = errorData.error || errorMessage;
     } catch (e) {
-        const errorText = await response.text();
+        const errorText = await clonedResponse.text();
         console.error('Non-JSON error response:', errorText);
     }
     throw new Error(errorMessage);
@@ -21,6 +22,7 @@ async function fetchData(password) {
 
 const data = await response.json();
 return data.className;
+
 
     } catch (error) {
         console.error('Error fetching data:', error);
