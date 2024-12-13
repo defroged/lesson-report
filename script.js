@@ -4,33 +4,18 @@ window.onload = () => {
 };
 
 async function fetchData(password) {
-    const spreadsheetId = "1ax9LCCUn1sT6ogfZ4sv9Qj9Nx6tdAB-lQ3JYxdHIF7U";
-    const apiKey = 'AIzaSyAGi58EWi-d5IrxvWkJuVY6ptplm93r4dU'; 
-    const range = "Sheet1!A:M"; 
-    
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-    
     try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await fetch(`/api/fetchData?password=${encodeURIComponent(password)}`);
         
-        if (data && data.values) {
-    const rows = data.values.slice(1); // Skip the header row
-    const match = rows.find(row => row[12] && row[12].trim() === password.trim()); // Column M (index 12)
-    
-    if (match) {
-        return match[1] || "No class name provided"; // Column B (index 1) for class name
-    } else {
-        console.error("No matching row found for the provided password.");
-        return null;
-    }
-} else {
-    console.error("Invalid response structure or no data found in the spreadsheet.");
-    return null;
-}
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to fetch data.');
+        }
 
+        const data = await response.json();
+        return data.className;
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
         return null;
     }
 }
@@ -53,3 +38,6 @@ async function checkPassword() {
         alert('Invalid password. Please try again.');
     }
 }
+
+// Ensure you have a button with id 'submitPasswordButton' to trigger password check
+document.getElementById('submitPasswordButton').addEventListener('click', checkPassword);
