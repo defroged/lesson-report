@@ -1,37 +1,166 @@
+/* styles.css */
+
 body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .modal-content input {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px 0;
-        }
-        .timeline {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.modal-content input {
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.timeline {
+    display: none;
+    flex-direction: column;
+    margin: 50px 180px;
+}
+
+.timeline-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border-left: 3px solid #ccc;
+    padding-left: 10px;
+    position: relative;
+}
+
+.timeline-date {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+    padding-right: 10px;
+}
+
+.timeline-content {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-bottom: 50px;
+}
+
+.timeline-content img {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 5px !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 600px !important;
+}
+
+.post-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center; /* Center align the post title */
+    color: #333;
+}
+
+.posted-by {
+    font-style: italic;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    text-align: center; /* Center align the posted-by text */
+    color: #666;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border: 3px solid #ccc;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+/* Removed WordPress gallery styles */
+
+@media (max-width: 768px) {
+    .timeline {
+        margin: 22px;
+    }
+}
+
+/* Button Styling */
+#load-more-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+#load-more {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#load-more:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#load-more:active {
+    background-color: #004494;
+    transform: scale(0.95);
+}
+
+/* Animation for button */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+#load-more {
+    animation: bounce 2s infinite;
+}
+
+@media (max-width: 768px) {
+    .timeline {
+        margin: 22px;
+    }
+}
