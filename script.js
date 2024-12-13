@@ -8,12 +8,20 @@ async function fetchData(password) {
         const response = await fetch(`/api/fetchData?password=${encodeURIComponent(password)}`);
         
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to fetch data.');
-        }
+    let errorMessage = 'Failed to fetch data.';
+    try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+    } catch (e) {
+        const errorText = await response.text();
+        console.error('Non-JSON error response:', errorText);
+    }
+    throw new Error(errorMessage);
+}
 
-        const data = await response.json();
-        return data.className;
+const data = await response.json();
+return data.className;
+
     } catch (error) {
         console.error('Error fetching data:', error);
         return null;

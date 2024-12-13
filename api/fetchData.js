@@ -16,13 +16,21 @@ export default async function handler(req, res) {
 
   const spreadsheetId = process.env.SPREADSHEET_ID;
   const sheetName = process.env.SHEET_NAME || 'Sheet1';
+  const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+  const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY;
+
+  // Check for missing environment variables
+  if (!spreadsheetId || !googleClientEmail || !googlePrivateKey) {
+    console.error('Missing one or more required environment variables.');
+    return res.status(500).json({ error: 'Server configuration error.' });
+  }
 
   try {
     // Initialize Google Sheets API client
     const auth = new google.auth.JWT(
-      process.env.GOOGLE_CLIENT_EMAIL, // Service account email
+      googleClientEmail, // Service account email
       null,
-      process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Private key
+      googlePrivateKey.replace(/\\n/g, '\n'), // Private key
       ['https://www.googleapis.com/auth/spreadsheets.readonly']
     );
 
@@ -62,3 +70,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
