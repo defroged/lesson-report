@@ -201,16 +201,30 @@ body > div {
 }
 
 /* Images */
-.timeline-content img {
+.timeline-content .timeline-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* First image spans all columns, making it larger */
+.timeline-content .timeline-gallery img:first-child {
+    grid-column: 1 / -1;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* General styling for all images in the gallery */
+.timeline-content .timeline-gallery img {
     width: 100%;
     height: auto;
     border-radius: 8px;
-    margin-bottom: 15px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 600px;
+    margin: 0 auto;
+    max-width: 100%;
 }
+
 
 /* Load More Container */
 #load-more-container {
