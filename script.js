@@ -73,12 +73,17 @@ function createTimelineItem(report) {
     timelineContent.appendChild(postTitle);
 
     if (report.classPictures && report.classPictures.length > 0) {
-        report.classPictures.forEach(url => {
-            const img = document.createElement('img');
-            img.src = url;
-            timelineContent.appendChild(img);
-        });
-    }
+    const gallery = document.createElement('div');
+    gallery.classList.add('timeline-gallery');
+
+    report.classPictures.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        gallery.appendChild(img);
+    });
+
+    timelineContent.appendChild(gallery);
+}
 
     const postedBy = document.createElement('p');
     postedBy.classList.add('posted-by');
