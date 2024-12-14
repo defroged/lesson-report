@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Class Setup Wizard</title>
+<link rel="stylesheet" href="teacher-page-styles.css" />
+</head>
+<body>
+<div class="container">
+
+  <!-- Step 1: Choose Teacher -->
+  <div class="step" id="step1">
+    <h2>Step 1: Choose Teacher</h2>
+    <select id="teacherSelect">
+      <option value="">-- Select a Teacher --</option>
+      <option value="Ron">Ron</option>
+      <option value="Mel">Mel</option>
+    </select>
+    <button id="next1" disabled>Next</button>
+  </div>
+
+  <!-- Step 2: Choose Class -->
+  <div class="step" id="step2" style="display:none;">
+    <h2>Step 2: Choose Class</h2>
+    <!-- In the future, populate this from Firestore -->
+    <select id="classSelect">
+      <option value="">-- Select a Class --</option>
+      <option value="Math101">Math101</option>
+      <option value="Science201">Science201</option>
+      <option value="History305">History305</option>
+    </select>
+    <button id="next2" disabled>Next</button>
+  </div>
+
+  <!-- Step 3: Upload Class Pictures -->
+  <div class="step" id="step3" style="display:none;">
+    <h2>Step 3: Upload Class Pictures</h2>
+    <!-- Placeholder for upload functionality -->
+    <input type="file" id="classPictures" accept="image/*" multiple />
+    <button id="next3" disabled>Next</button>
+  </div>
+
+  <!-- Step 4: Upload Lesson Contents -->
+  <div class="step" id="step4" style="display:none;">
+    <h2>Step 4: Upload Lesson Contents</h2>
+    <!-- Placeholder for upload functionality -->
+    <input type="file" id="lessonContents" accept="image/*" multiple />
+    <button id="next4" disabled>Next</button>
+  </div>
+
+  <!-- Step 5: Submit -->
+  <div class="step" id="step5" style="display:none;">
+    <h2>Step 5: Submit</h2>
+    <p>Review your selections and upload files, then submit.</p>
+    <button id="submitBtn">Submit</button>
+  </div>
+
+</div>
+<script src="teacherMainScript.js"></script>
+</body>
+</html>
