@@ -79,11 +79,14 @@ function createTimelineItem(report) {
     report.classPictures.forEach(url => {
         const img = document.createElement('img');
         img.src = url;
+        // Add a click event to open the modal
+        img.addEventListener('click', () => openImageModal(url));
         gallery.appendChild(img);
     });
 
     timelineContent.appendChild(gallery);
 }
+
 
     const postedBy = document.createElement('p');
     postedBy.classList.add('posted-by');
@@ -189,3 +192,21 @@ document.addEventListener("DOMContentLoaded", function() {
         loadMoreBtn.setAttribute("data-page", nextPage.toString());
     });
 });
+
+function openImageModal(imageUrl) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+
+    modalImg.src = imageUrl;
+    modal.style.display = 'flex';
+}
+
+// Close the modal when clicking on the close button or outside the image
+document.addEventListener('click', function (event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target.classList.contains('image-modal') || 
+        event.target.classList.contains('image-modal-close')) {
+        modal.style.display = 'none';
+    }
+});
+
