@@ -26,12 +26,17 @@ teacherSelect.addEventListener('change', () => {
 });
 
 // When a class is selected, show step 3
-classSelect.addEventListener('change', () => {
+classSelect.addEventListener('change', async () => {
   if (classSelect.value !== '') {
     step2.style.display = 'none';
+
+    // Fetch the events for the selected class
+    await populateClassEvents(classSelect.value);
+
     step3.style.display = 'block';
   }
 });
+
 
 // When class pictures are selected, show step 4
 classPictures.addEventListener('change', () => {
@@ -80,3 +85,36 @@ async function populateClasses() {
     console.error('Error fetching classes:', error);
   }
 }
+
+async function populateClassEvents(selectedClass) {
+  const classEventsSelect = document.getElementById('classEventsSelect');
+  
+  // Clear existing options (except the first)
+  while (classEventsSelect.options.length > 1) {
+    classEventsSelect.remove(1);
+  }
+
+  try {
+    const now = new Date();
+    const timeMax = now.toISOString();
+    const timeMin = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days back
+
+    const response = await fetch(`/api/getClassEvents?className=${encodeURIComponent(selectedClass)}&timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch class events');
+    }
+    const data = await response.json();
+    const events = data.events || [];
+
+    events.forEach(evt => {
+      const option = document.createElement('option');
+      // Format as "ClassName YYYY-MM-DD"
+      option.value = evt.date;
+      option.textContent = `${selectedClass} ${evt.date}`;
+      classEventsSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error fetching class events:', error);
+  }
+}
+
