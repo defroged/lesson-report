@@ -161,11 +161,7 @@ body > div {
 }
 
 .timeline-content .post-title {
-    font-size: 1.6em;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: center;
-    color: #333;
+    display: none;
 }
 
 .timeline-content .posted-by {
@@ -256,6 +252,13 @@ body > div {
     background-color: #004494;
     transform: scale(0.95);
 }
+
+.activities-label, .grammar-label, .phrases-label, .vocabulary-label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 5px;
+}
+
 
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {

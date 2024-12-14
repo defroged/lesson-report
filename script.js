@@ -100,26 +100,32 @@ function createTimelineItem(report) {
 
     // Add processed data
     const processedData = report.processedData;
-    if (processedData.activities) {
-        const activities = document.createElement('p');
-        activities.textContent = `Activities: ${processedData.activities.join(', ')}`;
-        timelineContent.appendChild(activities);
-    }
-    if (processedData.grammar) {
-        const grammar = document.createElement('p');
-        grammar.textContent = `Grammar: ${processedData.grammar.join(', ')}`;
-        timelineContent.appendChild(grammar);
-    }
-    if (processedData.phrasesAndSentences) {
-        const phrases = document.createElement('p');
-        phrases.textContent = `Phrases & Sentences: ${processedData.phrasesAndSentences.join(', ')}`;
-        timelineContent.appendChild(phrases);
-    }
-    if (processedData.vocabulary) {
-        const vocabulary = document.createElement('p');
-        vocabulary.textContent = `Vocabulary: ${processedData.vocabulary.join(', ')}`;
-        timelineContent.appendChild(vocabulary);
-    }
+    function appendSection(timelineContent, title, items, className) {
+    const container = document.createElement('p');
+    
+    const label = document.createElement('span');
+    label.classList.add(className);
+    label.textContent = title + ': ';
+    
+    const text = document.createTextNode(items.join(', '));
+    
+    container.appendChild(label);
+    container.appendChild(text);
+    timelineContent.appendChild(container);
+}
+
+if (processedData.activities) {
+    appendSection(timelineContent, 'Activities', processedData.activities, 'activities-label');
+}
+if (processedData.grammar) {
+    appendSection(timelineContent, 'Grammar', processedData.grammar, 'grammar-label');
+}
+if (processedData.phrasesAndSentences) {
+    appendSection(timelineContent, 'Phrases & Sentences', processedData.phrasesAndSentences, 'phrases-label');
+}
+if (processedData.vocabulary) {
+    appendSection(timelineContent, 'Vocabulary', processedData.vocabulary, 'vocabulary-label');
+}
 
     timelineItem.appendChild(timelineContent);
     return timelineItem;
