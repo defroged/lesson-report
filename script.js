@@ -164,6 +164,7 @@ async function checkPassword() {
         document.getElementById('passwordModal').style.display = 'none';
         document.getElementById('classHeading').textContent = `${className} - Lesson Report`;
         document.getElementById('timeline').style.display = 'block';
+		document.getElementById('load-more-container').style.display = 'flex';
 
         // Initialize load more button data
         const loadMoreBtn = document.getElementById('load-more');
