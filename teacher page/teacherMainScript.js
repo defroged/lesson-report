@@ -1,3 +1,5 @@
+// teacherMainScript.js
+
 // Get references to buttons and form elements
 const teacherSelect = document.getElementById('teacherSelect');
 const next1 = document.getElementById('next1');
@@ -19,6 +21,11 @@ const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
 const step4 = document.getElementById('step4');
 const step5 = document.getElementById('step5');
+
+// Populate classes on page load
+document.addEventListener('DOMContentLoaded', async () => {
+  await populateClasses();
+});
 
 // Enable "Next" button on Step 1 when a teacher is selected
 teacherSelect.addEventListener('change', () => {
@@ -66,8 +73,33 @@ next4.addEventListener('click', () => {
 
 // On clicking submitBtn, for now just log the data (placeholder)
 submitBtn.addEventListener('click', () => {
-  // Placeholder for your submit logic
-  // Here you could gather the teacher name, class name, file references, etc.
-  console.log('Submit clicked');
+  // Placeholder: gather data and log
+  console.log('Selected Teacher:', teacherSelect.value);
+  console.log('Selected Class:', classSelect.value);
+  console.log('Class Pictures:', classPictures.files);
+  console.log('Lesson Contents:', lessonContents.files);
+
   alert('Data submitted (placeholder)');
 });
+
+// Function to fetch classes from the serverless endpoint and populate the dropdown
+async function populateClasses() {
+  try {
+    const response = await fetch('/api/getClasses');
+    if (!response.ok) {
+      throw new Error('Failed to fetch classes');
+    }
+    const data = await response.json();
+    const classes = data.classes || [];
+
+    // Populate the classSelect dropdown
+    classes.forEach(className => {
+      const option = document.createElement('option');
+      option.value = className;
+      option.textContent = className;
+      classSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error fetching classes:', error);
+  }
+}
