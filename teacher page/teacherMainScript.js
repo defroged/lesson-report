@@ -37,36 +37,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 // When a teacher is selected, show step 2
 teacherSelect.addEventListener('change', () => {
   if (teacherSelect.value !== '') {
-    step1.style.display = 'none';
-    step2.style.display = 'block';
+    step1.classList.remove('active');
+    step2.classList.add('active');
   }
 });
 
 // When a class is selected, show step 3
 classSelect.addEventListener('change', async () => {
   if (classSelect.value !== '') {
-    step2.style.display = 'none';
+    step2.classList.remove('active');
 
     // Fetch the events for the selected class
     await populateClassEvents(classSelect.value);
 
-    step3.style.display = 'block';
+    step3.classList.add('active');
   }
 });
 
 // When class pictures are selected, show step 4
 classPictures.addEventListener('change', () => {
   if (classPictures.files.length > 0) {
-    step3.style.display = 'none';
-    step4.style.display = 'block';
+    step3.classList.remove('active');
+    step4.classList.add('active');
   }
 });
 
 // When lesson contents are selected, show step 5
 lessonContents.addEventListener('change', () => {
   if (lessonContents.files.length > 0) {
-    step4.style.display = 'none';
-    step5.style.display = 'block';
+    step4.classList.remove('active');
+    step5.classList.add('active');
   }
 });
 

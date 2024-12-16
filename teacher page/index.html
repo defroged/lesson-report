@@ -10,47 +10,50 @@
 <div class="container">
 
   <!-- Step 1: Choose Teacher -->
-  <div class="step" id="step1">
-    <h2>Step 1: Choose Teacher</h2>
-    <select id="teacherSelect">
-      <option value="">-- Select a Teacher --</option>
-      <option value="Ron">Ron</option>
-      <option value="Mel">Mel</option>
-    </select>
-  </div>
+  <div class="step active" id="step1">
+  <h2>Step 1: Choose Teacher</h2>
+  <select id="teacherSelect">
+    <option value="">-- Select a Teacher --</option>
+    <option value="Ron">Ron</option>
+    <option value="Mel">Mel</option>
+  </select>
+</div>
 
-  <!-- Step 2: Choose Class -->
-  <div class="step" id="step2" style="display:none;">
-    <h2>Step 2: Choose Class</h2>
-    <!-- Will be populated from Firestore -->
-    <select id="classSelect">
-      <option value="">-- Select a Class --</option>
-    </select>
-  </div>
+<!-- Step 2: Choose Class -->
+<div class="step" id="step2">
+  <h2>Step 2: Choose Class</h2>
+  <!-- Will be populated from Firestore -->
+  <select id="classSelect">
+    <option value="">-- Select a Class --</option>
+  </select>
+</div>
 
   <!-- Step 3: Upload Class Pictures -->
-  <div class="step" id="step3" style="display:none;">
-  <h2>Step 3: Upload Class Pictures</h2>
-  <input type="file" id="classPictures" accept="image/*" multiple />
-  <br><br>
-  <label for="classEventsSelect">Select an Event:</label>
+<div class="step" id="step3">
+    <h2>
+  <label for="classEventsSelect">Select an Event</label>
+</h2>
   <select id="classEventsSelect">
     <option value="">-- Select an Event --</option>
   </select>
+  <br>
+    <h2>Upload Class Pictures</h2> 
+<input type="file" id="classPictures" accept="image/*" multiple />
 </div>
 
 
   <!-- Step 4: Upload Lesson Contents -->
-  <div class="step" id="step4" style="display:none;">
-    <h2>Step 4: Upload Lesson Contents</h2>
-    <input type="file" id="lessonContents" accept="image/*" multiple />
-  </div>
+<div class="step" id="step4">
+  <h2>Step 4: Upload Lesson Contents</h2>
+  <input type="file" id="lessonContents" accept="image/*" multiple />
+</div>
+
 
 <!-- Step 5: Submit -->
-<div class="step" id="step5" style="display:none;">
+<div class="step" id="step5">
   <h2>Step 5: Submit</h2>
   <p>Review your selections and uploads, then submit.</p>
-  <input type="text" id="homeworkURLInput" placeholder="Paste homework URL here" style="width: 100%; margin-bottom: 10px;"/>
+  <input type="text" id="homeworkURLInput" placeholder="Paste homework URL here" class="homework-url-input"/>
   <button id="submitBtn">Submit</button>
 </div>
 
