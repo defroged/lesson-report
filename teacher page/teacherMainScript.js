@@ -229,6 +229,24 @@ async function populateClassEvents(selectedClass) {
       option.textContent = `${selectedClass} ${evt.date}`;
       classEventsSelect.appendChild(option);
     });
+
+    // Select the event date closest to today
+    if (events.length > 0) {
+      let closestIndex = 0;
+      let closestDiff = Infinity;
+      const today = new Date();
+      events.forEach((evt, index) => {
+        const [year, month, day] = evt.date.split('-').map(Number);
+        const evtDate = new Date(year, month - 1, day);
+        const diff = Math.abs(evtDate - today);
+        if (diff < closestDiff) {
+          closestDiff = diff;
+          closestIndex = index;
+        }
+      });
+      // +1 because the first option is the placeholder
+      classEventsSelect.selectedIndex = closestIndex + 1;
+    }
   } catch (error) {
     console.error('Error fetching class events:', error);
   }
