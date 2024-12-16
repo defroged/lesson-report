@@ -71,6 +71,7 @@ lessonContents.addEventListener('change', () => {
 });
 
 // On clicking submit
+// On clicking submit
 submitBtn.addEventListener('click', async () => {
   try {
     const classEventsSelect = document.getElementById('classEventsSelect');
@@ -96,7 +97,6 @@ submitBtn.addEventListener('click', async () => {
     // Upload class pictures
     const pictureFiles = classPictures.files;
     const uploadedPictureURLs = [];
-
     for (let i = 0; i < pictureFiles.length; i++) {
       const file = pictureFiles[i];
       const fileRef = storage.ref(`classPictures/${className}/${dateStr}/${file.name}`);
@@ -105,11 +105,22 @@ submitBtn.addEventListener('click', async () => {
       uploadedPictureURLs.push(url);
     }
 
-    // Create the lesson report document
+    // Upload lesson contents
+    const lessonFiles = lessonContents.files;
+    const lessonContentURLs = [];
+    for (let i = 0; i < lessonFiles.length; i++) {
+      const file = lessonFiles[i];
+      const fileRef = storage.ref(`lessonContents/${className}/${dateStr}/${file.name}`);
+      await fileRef.put(file);
+      const url = await fileRef.getDownloadURL();
+      lessonContentURLs.push(url);
+    }
+
+    // Create the lesson report document without processedData first
     const docRef = db.collection('classes')
                      .doc(className)
                      .collection('lessonReports')
-                     .doc(dateStr); // Using dateStr as the doc ID
+                     .doc(dateStr);
 
     await docRef.set({
       date: timestamp,
@@ -123,7 +134,25 @@ submitBtn.addEventListener('click', async () => {
       }
     }, { merge: true });
 
-    alert('Lesson Report submitted successfully!');
+    // Now call the serverless function to get processedData from the lessonContents images
+    const response = await fetch('/api/extractLessonDataFromImages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrls: lessonContentURLs })
+    });
+
+    if (!response.ok) {
+      console.error('Error extracting data:', await response.text());
+      alert('Error extracting data from images.');
+      return;
+    }
+
+    const { processedData } = await response.json();
+
+    // Update the Firestore document with processedData
+    await docRef.update({ processedData });
+
+    alert('Lesson Report submitted and processedData extracted successfully!');
   } catch (error) {
     console.error('Error submitting data:', error);
     alert('Error submitting data. Check console for details.');
