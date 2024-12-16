@@ -71,7 +71,6 @@ lessonContents.addEventListener('change', () => {
 });
 
 // On clicking submit
-// On clicking submit
 submitBtn.addEventListener('click', async () => {
   try {
     const classEventsSelect = document.getElementById('classEventsSelect');
@@ -105,16 +104,35 @@ submitBtn.addEventListener('click', async () => {
       uploadedPictureURLs.push(url);
     }
 
-    // Upload lesson contents
-    const lessonFiles = lessonContents.files;
-    const lessonContentURLs = [];
-    for (let i = 0; i < lessonFiles.length; i++) {
-      const file = lessonFiles[i];
-      const fileRef = storage.ref(`lessonContents/${className}/${dateStr}/${file.name}`);
-      await fileRef.put(file);
-      const url = await fileRef.getDownloadURL();
-      lessonContentURLs.push(url);
-    }
+// Upload lessonContents directly to Cloudinary
+const lessonFiles = lessonContents.files;
+const lessonContentURLs = [];
+
+const cloudName = "dzo0vucxp"; // Replace with your Cloudinary cloud name
+const uploadPreset = "pxqxa22g"; // Replace with your unsigned upload preset
+
+for (let i = 0; i < lessonFiles.length; i++) {
+  const file = lessonFiles[i];
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', uploadPreset);
+
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok) {
+    console.error('Error uploading to Cloudinary:', await response.text());
+    alert('Error uploading lesson content image.');
+    return;
+  }
+
+  const data = await response.json();
+  // data.secure_url is the publicly accessible URL for the image
+  lessonContentURLs.push(data.secure_url);
+}
+
 
     // Create the lesson report document without processedData first
     const docRef = db.collection('classes')
