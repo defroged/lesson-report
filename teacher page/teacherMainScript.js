@@ -71,20 +71,7 @@ lessonContents.addEventListener('change', () => {
 });
 
 // On clicking submit
-// Reference to the paste button and URL input
-const pasteHomeworkURLBtn = document.getElementById('pasteHomeworkURLBtn');
 const homeworkURLInput = document.getElementById('homeworkURLInput');
-
-// On clicking the pasteHomeworkURLBtn
-pasteHomeworkURLBtn.addEventListener('click', async () => {
-  try {
-    const text = await navigator.clipboard.readText();
-    homeworkURLInput.value = text;
-  } catch (err) {
-    console.error('Failed to read clipboard: ', err);
-    alert('Could not read from clipboard. Please copy the URL again.');
-  }
-});
 
 // On clicking submit
 submitBtn.addEventListener('click', async () => {
