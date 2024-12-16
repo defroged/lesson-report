@@ -1,4 +1,4 @@
-// teacherMainScript.js (updated code)
+// teacherMainScript.js 
 
 // Your provided Firebase configuration
 const firebaseConfig = {
@@ -71,12 +71,29 @@ lessonContents.addEventListener('change', () => {
 });
 
 // On clicking submit
+// Reference to the paste button and URL input
+const pasteHomeworkURLBtn = document.getElementById('pasteHomeworkURLBtn');
+const homeworkURLInput = document.getElementById('homeworkURLInput');
+
+// On clicking the pasteHomeworkURLBtn
+pasteHomeworkURLBtn.addEventListener('click', async () => {
+  try {
+    const text = await navigator.clipboard.readText();
+    homeworkURLInput.value = text;
+  } catch (err) {
+    console.error('Failed to read clipboard: ', err);
+    alert('Could not read from clipboard. Please copy the URL again.');
+  }
+});
+
+// On clicking submit
 submitBtn.addEventListener('click', async () => {
   try {
     const classEventsSelect = document.getElementById('classEventsSelect');
-    const selectedEventValue = classEventsSelect.value; // "ClassName YYYY-MM-DD"
+    const selectedEventValue = classEventsSelect.value; 
     const selectedTeacher = teacherSelect.value;
     const selectedClass = classSelect.value;
+    const homeworkURL = homeworkURLInput.value.trim();
 
     if (!selectedEventValue || !selectedClass) {
       alert("Please select an event and class.");
@@ -85,8 +102,8 @@ submitBtn.addEventListener('click', async () => {
 
     // Parse className and date
     const parts = selectedEventValue.trim().split(' ');
-    const dateStr = parts[parts.length - 1]; // last part is the date (YYYY-MM-DD)
-    const className = parts.slice(0, parts.length - 1).join(' '); // join the rest as class name
+    const dateStr = parts[parts.length - 1]; 
+    const className = parts.slice(0, parts.length - 1).join(' '); 
 
     // Convert YYYY-MM-DD to Timestamp
     const [year, month, day] = dateStr.split('-').map(Number);
@@ -104,35 +121,34 @@ submitBtn.addEventListener('click', async () => {
       uploadedPictureURLs.push(url);
     }
 
-// Upload lessonContents directly to Cloudinary
-const lessonFiles = lessonContents.files;
-const lessonContentURLs = [];
+    // Upload lessonContents directly to Cloudinary
+    const lessonFiles = lessonContents.files;
+    const lessonContentURLs = [];
 
-const cloudName = "dzo0vucxp"; // Replace with your Cloudinary cloud name
-const uploadPreset = "pxqxa22g"; // Replace with your unsigned upload preset
+    const cloudName = "dzo0vucxp"; 
+    const uploadPreset = "pxqxa22g"; 
 
-for (let i = 0; i < lessonFiles.length; i++) {
-  const file = lessonFiles[i];
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', uploadPreset);
+    for (let i = 0; i < lessonFiles.length; i++) {
+      const file = lessonFiles[i];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', uploadPreset);
 
-  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-    method: 'POST',
-    body: formData
-  });
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
 
-  if (!response.ok) {
-    console.error('Error uploading to Cloudinary:', await response.text());
-    alert('Error uploading lesson content image.');
-    return;
-  }
+      if (!response.ok) {
+        console.error('Error uploading to Cloudinary:', await response.text());
+        alert('Error uploading lesson content image.');
+        return;
+      }
 
-  const data = await response.json();
-  // data.secure_url is the publicly accessible URL for the image
-  lessonContentURLs.push(data.secure_url);
-}
-
+      const data = await response.json();
+      // data.secure_url is the publicly accessible URL for the image
+      lessonContentURLs.push(data.secure_url);
+    }
 
     // Create the lesson report document without processedData first
     const docRef = db.collection('classes')
@@ -143,7 +159,7 @@ for (let i = 0; i < lessonFiles.length; i++) {
     await docRef.set({
       date: timestamp,
       classPictures: uploadedPictureURLs,
-      homeworkURL: "",
+      homeworkURL: homeworkURL,
       processedData: {
         activities: [],
         grammar: [],
