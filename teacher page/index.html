@@ -10,7 +10,7 @@
 <div class="container">
 
   <!-- Step 1: Choose Teacher -->
-  <div class="step active" id="step1">
+<div class="step active" id="step1">
   <h2>Step 1: Choose Teacher</h2>
   <select id="teacherSelect">
     <option value="">-- Select a Teacher --</option>
@@ -22,32 +22,30 @@
 <!-- Step 2: Choose Class -->
 <div class="step" id="step2">
   <h2>Step 2: Choose Class</h2>
-  <!-- Will be populated from Firestore -->
   <select id="classSelect">
     <option value="">-- Select a Class --</option>
   </select>
+  <button id="backToStep1" class="backBtn">Back</button>
 </div>
 
-  <!-- Step 3: Upload Class Pictures -->
+<!-- Step 3: Upload Class Pictures -->
 <div class="step" id="step3">
-    <h2>
-  <label for="classEventsSelect">Select an Event</label>
-</h2>
+  <h2><label for="classEventsSelect">Select an Event</label></h2>
   <select id="classEventsSelect">
     <option value="">-- Select an Event --</option>
   </select>
   <br>
-    <h2>Upload Class Pictures</h2> 
-<input type="file" id="classPictures" accept="image/*" multiple />
+  <h2>Upload Class Pictures</h2> 
+  <input type="file" id="classPictures" accept="image/*" multiple />
+  <button id="backToStep2" class="backBtn">Back</button>
 </div>
 
-
-  <!-- Step 4: Upload Lesson Contents -->
+<!-- Step 4: Upload Lesson Contents -->
 <div class="step" id="step4">
   <h2>Step 4: Upload Lesson Contents</h2>
   <input type="file" id="lessonContents" accept="image/*" multiple />
+  <button id="backToStep3" class="backBtn">Back</button>
 </div>
-
 
 <!-- Step 5: Submit -->
 <div class="step" id="step5">
@@ -55,6 +53,7 @@
   <p>Review your selections and uploads, then submit.</p>
   <input type="text" id="homeworkURLInput" placeholder="Paste homework URL here" class="homework-url-input"/>
   <button id="submitBtn">Submit</button>
+  <button id="backToStep4" class="backBtn">Back</button>
 </div>
 
 

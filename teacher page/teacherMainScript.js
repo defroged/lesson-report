@@ -180,6 +180,42 @@ submitBtn.addEventListener('click', async () => {
   }
 });
 
+// Back button elements
+const backToStep1 = document.getElementById('backToStep1');
+const backToStep2 = document.getElementById('backToStep2');
+const backToStep3 = document.getElementById('backToStep3');
+const backToStep4 = document.getElementById('backToStep4');
+
+// Back button event listeners
+if (backToStep1) {
+  backToStep1.addEventListener('click', () => {
+    step2.classList.remove('active');
+    step1.classList.add('active');
+  });
+}
+
+if (backToStep2) {
+  backToStep2.addEventListener('click', () => {
+    step3.classList.remove('active');
+    step2.classList.add('active');
+  });
+}
+
+if (backToStep3) {
+  backToStep3.addEventListener('click', () => {
+    step4.classList.remove('active');
+    step3.classList.add('active');
+  });
+}
+
+if (backToStep4) {
+  backToStep4.addEventListener('click', () => {
+    step5.classList.remove('active');
+    step4.classList.add('active');
+  });
+}
+
+
 // Fetch classes from Firestore via the serverless endpoint
 async function populateClasses() {
   try {
