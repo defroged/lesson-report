@@ -1,6 +1,6 @@
 // /api/extractLessonDataFromImages.js
 
-import { OpenAIApi, Configuration } from "openai";
+import OpenAI from "openai";
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -13,43 +13,44 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'imageUrls is required and should be a non-empty array.' });
   }
 
-  const openaiApiKey = process.env.OPENAI_API_KEY;
-  if (!openaiApiKey) {
+  if (!process.env.OPENAI_API_KEY) {
     return res.status(500).json({ error: 'OpenAI API key not configured.' });
   }
 
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+  });
+
+  const messages = [
+    {
+      role: "user",
+      content: [
+        {
+          type: "text",
+          text: "Extract the following information from these images:\n- A list of activities observed\n- Grammar points relevant to a language lesson\n- Phrases and sentences that can be derived\n- Vocabulary words\n\nReturn the data in JSON format with keys: activities, grammar, phrasesAndSentences, vocabulary.\n\nImages:"
+        },
+        ...imageUrls.map(url => ({
+          type: "image_url",
+          image_url: { url }
+        }))
+      ],
+    }
+  ];
+
   try {
-    const configuration = new Configuration({ apiKey: openaiApiKey });
-    const openai = new OpenAIApi(configuration);
-
-    // Construct the user message with all images
-    const messages = [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: "Extract the following information from these images:\n- A list of activities observed\n- Grammar points relevant to a language lesson\n- Phrases and sentences that can be derived\n- Vocabulary words for objects or elements visible\n\nReturn the data in JSON format with keys: activities, grammar, phrasesAndSentences, vocabulary.\n\nImages:" },
-          ...imageUrls.map(url => ({
-            type: "image_url",
-            image_url: { url }
-          }))
-        ]
-      }
-    ];
-
-    const completion = await openai.createChatCompletion({
-      model: "gpt-4o",
-      messages: messages
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // adjust the model name if needed
+      messages
     });
 
-    const resultContent = completion.data.choices[0].message.content;
+    const content = completion.choices[0].message.content;
 
-    // The response from the model should be JSON. If it's not, you might need to parse it or handle errors.
+    // Try to parse the content as JSON
     let processedData;
     try {
-      processedData = JSON.parse(resultContent);
+      processedData = JSON.parse(content);
     } catch (err) {
-      console.error("Failed to parse JSON from model response:", err);
-      // If model doesn't return JSON as expected, handle gracefully
+      console.error('Failed to parse model output as JSON:', err);
       return res.status(500).json({ error: 'Model did not return valid JSON.' });
     }
 
