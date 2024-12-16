@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       content: [
         {
           type: "text",
-          text: "Extract the following information from these images:\n- A list of activities observed\n- Grammar points relevant to a language lesson\n- Phrases and sentences that can be derived\n- Vocabulary words\n\nReturn the data in JSON format with keys: activities, grammar, phrasesAndSentences, vocabulary.\n\nImages:"
+          text: "Extract the requested data from these images and return ONLY pure JSON. Do not include triple backticks or code blocks. Use this JSON structure:\n{\n  \"activities\": [],\n  \"grammar\": [],\n  \"phrasesAndSentences\": [],\n  \"vocabulary\": []\n}\n\nImages:"
         },
         ...imageUrls.map(url => ({
           type: "image_url",
