@@ -75,7 +75,12 @@ const homeworkURLInput = document.getElementById('homeworkURLInput');
 
 // On clicking submit
 submitBtn.addEventListener('click', async () => {
+  const loadingOverlay = document.getElementById('loadingOverlay');
+
   try {
+    // Show loading overlay
+    loadingOverlay.style.display = 'flex';
+
     const classEventsSelect = document.getElementById('classEventsSelect');
     const selectedEventValue = classEventsSelect.value; 
     const selectedTeacher = teacherSelect.value;
@@ -84,6 +89,7 @@ submitBtn.addEventListener('click', async () => {
 
     if (!selectedEventValue || !selectedClass) {
       alert("Please select an event and class.");
+      loadingOverlay.style.display = 'none'; // Hide loading overlay on error
       return;
     }
 
@@ -129,11 +135,11 @@ submitBtn.addEventListener('click', async () => {
       if (!response.ok) {
         console.error('Error uploading to Cloudinary:', await response.text());
         alert('Error uploading lesson content image.');
+        loadingOverlay.style.display = 'none'; // Hide loading overlay on error
         return;
       }
 
       const data = await response.json();
-      // data.secure_url is the publicly accessible URL for the image
       lessonContentURLs.push(data.secure_url);
     }
 
@@ -155,7 +161,6 @@ submitBtn.addEventListener('click', async () => {
       }
     }, { merge: true });
 
-    // Now call the serverless function to get processedData from the lessonContents images
     const response = await fetch('/api/extractLessonDataFromImages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -165,6 +170,7 @@ submitBtn.addEventListener('click', async () => {
     if (!response.ok) {
       console.error('Error extracting data:', await response.text());
       alert('Error extracting data from images.');
+      loadingOverlay.style.display = 'none'; // Hide loading overlay on error
       return;
     }
 
@@ -177,6 +183,10 @@ submitBtn.addEventListener('click', async () => {
   } catch (error) {
     console.error('Error submitting data:', error);
     alert('Error submitting data. Check console for details.');
+  } finally {
+    // Hide loading overlay after completion (success or error)
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.style.display = 'none';
   }
 });
 
