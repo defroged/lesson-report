@@ -1,3 +1,20 @@
+// teacherMainScript.js (updated code)
+
+// Your provided Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCTdo6AfCDj3yVCnndBCIOrLRm7oOaDFW8",
+  authDomain: "bs-class-database.firebaseapp.com",
+  projectId: "bs-class-database",
+  storageBucket: "bs-class-database.firebasestorage.app", // Check correctness
+  messagingSenderId: "577863988524",
+  appId: "1:577863988524:web:dc28f58ed0350419d62889"
+};
+
+// Initialize Firebase app
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+
 // References to elements
 const teacherSelect = document.getElementById('teacherSelect');
 const classSelect = document.getElementById('classSelect');
@@ -37,7 +54,6 @@ classSelect.addEventListener('change', async () => {
   }
 });
 
-
 // When class pictures are selected, show step 4
 classPictures.addEventListener('change', () => {
   if (classPictures.files.length > 0) {
@@ -55,13 +71,63 @@ lessonContents.addEventListener('change', () => {
 });
 
 // On clicking submit
-submitBtn.addEventListener('click', () => {
-  console.log('Selected Teacher:', teacherSelect.value);
-  console.log('Selected Class:', classSelect.value);
-  console.log('Class Pictures:', classPictures.files);
-  console.log('Lesson Contents:', lessonContents.files);
+submitBtn.addEventListener('click', async () => {
+  try {
+    const classEventsSelect = document.getElementById('classEventsSelect');
+    const selectedEventValue = classEventsSelect.value; // "ClassName YYYY-MM-DD"
+    const selectedTeacher = teacherSelect.value;
+    const selectedClass = classSelect.value;
 
-  alert('Data submitted (placeholder)');
+    if (!selectedEventValue || !selectedClass) {
+      alert("Please select an event and class.");
+      return;
+    }
+
+    // Parse className and date
+    const parts = selectedEventValue.trim().split(' ');
+    const dateStr = parts[parts.length - 1]; // last part is the date (YYYY-MM-DD)
+    const className = parts.slice(0, parts.length - 1).join(' '); // join the rest as class name
+
+    // Convert YYYY-MM-DD to Timestamp
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const classDate = new Date(year, month - 1, day);
+    const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
+
+    // Upload class pictures
+    const pictureFiles = classPictures.files;
+    const uploadedPictureURLs = [];
+
+    for (let i = 0; i < pictureFiles.length; i++) {
+      const file = pictureFiles[i];
+      const fileRef = storage.ref(`classPictures/${className}/${dateStr}/${file.name}`);
+      await fileRef.put(file);
+      const url = await fileRef.getDownloadURL();
+      uploadedPictureURLs.push(url);
+    }
+
+    // Create the lesson report document
+    const docRef = db.collection('classes')
+                     .doc(className)
+                     .collection('lessonReports')
+                     .doc(dateStr); // Using dateStr as the doc ID
+
+    await docRef.set({
+      date: timestamp,
+      classPictures: uploadedPictureURLs,
+      homeworkURL: "",
+      processedData: {
+        activities: [],
+        grammar: [],
+        phrasesAndSentences: [],
+        vocabulary: []
+      }
+    }, { merge: true });
+
+    alert('Lesson Report submitted successfully!');
+  } catch (error) {
+    console.error('Error submitting data:', error);
+    alert('Error submitting data. Check console for details.');
+  }
 });
 
 // Fetch classes from Firestore via the serverless endpoint
@@ -109,7 +175,7 @@ async function populateClassEvents(selectedClass) {
     events.forEach(evt => {
       const option = document.createElement('option');
       // Format as "ClassName YYYY-MM-DD"
-      option.value = evt.date;
+      option.value = `${selectedClass} ${evt.date}`;
       option.textContent = `${selectedClass} ${evt.date}`;
       classEventsSelect.appendChild(option);
     });
@@ -117,4 +183,3 @@ async function populateClassEvents(selectedClass) {
     console.error('Error fetching class events:', error);
   }
 }
-
