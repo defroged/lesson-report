@@ -39,7 +39,7 @@ export default async function handler(req, res) {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // adjust the model name if needed
+      model: "gpt-4o", 
       messages
     });
 
