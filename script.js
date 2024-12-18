@@ -1,5 +1,12 @@
 // script.js
 
+
+
+window.onload = () => {
+    const passwordModal = document.getElementById('passwordModal');
+    passwordModal.style.display = 'flex'; // Ensure modal is visible
+};
+
 function showNotification(message, type = 'error') {
     const notification = document.getElementById('notification');
 
@@ -26,11 +33,6 @@ function showNotification(message, type = 'error') {
         notification.style.display = 'none';
     }, 3000);
 }
-
-window.onload = () => {
-    const passwordModal = document.getElementById('passwordModal');
-    passwordModal.style.display = 'flex'; // Ensure modal is visible
-};
 
 async function fetchData(password) {
     try {
