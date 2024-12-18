@@ -144,10 +144,10 @@ async function loadLessonReports(className, page) {
         return;
     }
 
-    lessonReports.forEach(report => {
-        const timelineItem = createTimelineItem(report);
-        timeline.appendChild(timelineItem);
-    });
+    lessonReports.reverse().forEach(report => {
+    const timelineItem = createTimelineItem(report);
+    timeline.prepend(timelineItem);
+});
 }
 
 async function checkPassword() {
