@@ -96,7 +96,7 @@ function createTimelineItem(report) {
     if (report.homeworkURL) {
         const homeworkLink = document.createElement('a');
         homeworkLink.href = report.homeworkURL;
-        homeworkLink.textContent = 'View Homework';
+        homeworkLink.textContent = '今日の宿題をダウンロード';
         homeworkLink.target = '_blank';
         timelineContent.appendChild(homeworkLink);
     }
@@ -118,16 +118,16 @@ function createTimelineItem(report) {
 }
 
 if (processedData.activities) {
-    appendSection(timelineContent, 'Activities', processedData.activities, 'activities-label');
+    appendSection(timelineContent, 'アクティビティ', processedData.activities, 'activities-label');
 }
 if (processedData.grammar) {
-    appendSection(timelineContent, 'Grammar', processedData.grammar, 'grammar-label');
+    appendSection(timelineContent, '文法', processedData.grammar, 'grammar-label');
 }
 if (processedData.phrasesAndSentences) {
-    appendSection(timelineContent, 'Phrases & Sentences', processedData.phrasesAndSentences, 'phrases-label');
+    appendSection(timelineContent, 'フレーズ＆文', processedData.phrasesAndSentences, 'phrases-label');
 }
 if (processedData.vocabulary) {
-    appendSection(timelineContent, 'Vocabulary', processedData.vocabulary, 'vocabulary-label');
+    appendSection(timelineContent, 'ことば', processedData.vocabulary, 'vocabulary-label');
 }
 
     timelineItem.appendChild(timelineContent);
