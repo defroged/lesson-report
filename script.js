@@ -30,7 +30,7 @@ async function fetchData(password) {
     }
 }
 
-async function fetchLessonReports(className, page = 1, limit = 10) {
+async function fetchLessonReports(className, page = 1, limit = 10) { //change 10 to any number for event limit
     try {
         const response = await fetch(`/api/getLessonReports?className=${encodeURIComponent(className)}&page=${page}&limit=${limit}`);
         
