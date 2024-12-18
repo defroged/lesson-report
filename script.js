@@ -184,42 +184,43 @@ async function checkPassword() {
     const passwordInput = document.getElementById('passwordInput').value;
 
     if (!passwordInput) {
-    showNotification('４桁のID番号を入力してください。', 'error');
-    return;
-}
+        showNotification('４桁のID番号を入力してください。', 'error');
+        return;
     }
 
     const className = await fetchData(passwordInput);
 
-if (className) {
-    document.getElementById('passwordModal').style.display = 'none';
+    if (className) {
+        document.getElementById('passwordModal').style.display = 'none';
 
-    // Show loading animation
-    const loading = document.getElementById('loading');
-    loading.style.display = 'flex';
+        // Show loading animation
+        const loading = document.getElementById('loading');
+        loading.style.display = 'flex';
 
-    document.getElementById('classHeading').textContent = `${className} - Lesson Report`;
+        document.getElementById('classHeading').textContent = `${className} - Lesson Report`;
 
-    // Initialize load more button data
-    const loadMoreBtn = document.getElementById('load-more');
-    loadMoreBtn.setAttribute('data-page', '1');
-    loadMoreBtn.setAttribute('data-class', className);
+        // Initialize load more button data
+        const loadMoreBtn = document.getElementById('load-more');
+        loadMoreBtn.setAttribute('data-page', '1');
+        loadMoreBtn.setAttribute('data-class', className);
 
-    // Load the first page of lesson reports
-    await loadLessonReports(className, 1);
+        // Load the first page of lesson reports
+        await loadLessonReports(className, 1);
 
-    // Hide loading animation and display timeline
-    loading.style.display = 'none';
-    document.getElementById('timeline').style.display = 'block';
+        // Hide loading animation and display timeline
+        loading.style.display = 'none';
+        document.getElementById('timeline').style.display = 'block';
 
-    // Show the load more button
-    const loadMoreContainer = document.getElementById('load-more-container');
-    loadMoreContainer.style.display = 'flex';
-} else {
-    showNotification('無効なパスワードです。もう一度入力してください。', 'error');
+        // Show the load more button
+        const loadMoreContainer = document.getElementById('load-more-container');
+        loadMoreContainer.style.display = 'flex';
+    } else {
+        showNotification('無効なパスワードです。もう一度入力してください。', 'error');
+    }
 }
 
-}
+
+
 
 // Ensure you have a button with id 'submitPasswordButton' to trigger password check
 document.getElementById('submitPasswordButton').addEventListener('click', checkPassword);
