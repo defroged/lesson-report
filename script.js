@@ -1,5 +1,32 @@
 // script.js
 
+function showNotification(message, type = 'error') {
+    const notification = document.getElementById('notification');
+
+    // Customize styles based on type (error, success, info)
+    if (type === 'error') {
+        notification.style.backgroundColor = '#f8d7da';
+        notification.style.color = '#721c24';
+        notification.style.borderColor = '#f5c6cb';
+    } else if (type === 'success') {
+        notification.style.backgroundColor = '#d4edda';
+        notification.style.color = '#155724';
+        notification.style.borderColor = '#c3e6cb';
+    } else if (type === 'info') {
+        notification.style.backgroundColor = '#d1ecf1';
+        notification.style.color = '#0c5460';
+        notification.style.borderColor = '#bee5eb';
+    }
+
+    notification.textContent = message;
+    notification.style.display = 'block';
+
+    // Hide the notification after 3 seconds
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
 window.onload = () => {
     const passwordModal = document.getElementById('passwordModal');
     passwordModal.style.display = 'flex'; // Ensure modal is visible
@@ -139,8 +166,9 @@ async function loadLessonReports(className, page) {
     const lessonReports = await fetchLessonReports(className, page);
 
     if (lessonReports.length === 0) {
-        alert('No more lesson reports to load.');
-        document.getElementById('load-more').style.display = 'none';
+        showNotification('No more lesson reports to load.', 'info');
+document.getElementById('load-more').style.display = 'none';
+
         return;
     }
 
@@ -154,8 +182,9 @@ async function checkPassword() {
     const passwordInput = document.getElementById('passwordInput').value;
 
     if (!passwordInput) {
-        alert('Please enter your password.');
-        return;
+    showNotification('４桁のID番号を入力してください。', 'error');
+    return;
+}
     }
 
     const className = await fetchData(passwordInput);
@@ -185,7 +214,7 @@ if (className) {
     const loadMoreContainer = document.getElementById('load-more-container');
     loadMoreContainer.style.display = 'flex';
 } else {
-    alert('Invalid password. Please try again.');
+    showNotification('無効なパスワードです。もう一度入力してください。', 'error');
 }
 
 }
