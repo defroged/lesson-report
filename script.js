@@ -96,7 +96,7 @@ function createTimelineItem(report) {
     if (report.homeworkURL) {
         const homeworkLink = document.createElement('a');
         homeworkLink.href = report.homeworkURL;
-        homeworkLink.textContent = '今日の宿題をダウンロード';
+        homeworkLink.textContent = '今日の宿題';
         homeworkLink.target = '_blank';
         timelineContent.appendChild(homeworkLink);
     }
