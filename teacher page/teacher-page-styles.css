@@ -93,6 +93,7 @@ input[type="text"]:focus {
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed);
   background: var(--accent-color);
+  font-size: 16px;
 }
 
 .homework-url-input:focus {
