@@ -259,13 +259,13 @@ if (nextFromStep2) {
 const nextFromStep3 = document.getElementById('nextFromStep3');
 if (nextFromStep3) {
   nextFromStep3.addEventListener('click', () => {
-    // Check if event and classPictures are already selected
     const classEventsSelect = document.getElementById('classEventsSelect');
-    if (classEventsSelect.value !== '' && classPictures.files.length > 0) {
+    // Only require the event to be selected; pictures are optional
+    if (classEventsSelect.value !== '') {
       step3.classList.remove('active');
       step4.classList.add('active');
     } else {
-      alert('Please select an event and upload class pictures.');
+      alert('Please select an event.');
     }
   });
 }
