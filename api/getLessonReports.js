@@ -3,13 +3,11 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
-// Initialize Firebase Admin SDK if not already initialized
 if (!getApps().length) {
   initializeApp({
     credential: cert({
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      // Replace escaped newline characters
       privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
     }),
   });
@@ -42,12 +40,9 @@ export default async function handler(req, res) {
       .doc(className)
       .collection('lessonReports')
       .orderBy('date', 'desc');
-
-    // Implementing pagination using cursors
     let query = lessonReportsRef.limit(limitNum);
 
     if (pageNum > 1) {
-      // Fetch all documents up to the start of the current page
       const previousPages = await lessonReportsRef.limit((pageNum - 1) * limitNum).get();
       if (!previousPages.empty) {
         const lastVisible = previousPages.docs[previousPages.docs.length - 1];

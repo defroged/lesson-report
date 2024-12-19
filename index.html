@@ -16,13 +16,22 @@
     </div>
 </div>
 
+<div id="classSelectionModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>クラスを選択してください</h2>
+        <select id="classSelectDropdown">
+            </select>
+        <button id="submitClassButton">OK</button>
+    </div>
+</div>
+
     <h1 id="classHeading"></h1>
-	
+    <button id="changeClassButton" style="display: none;">Change</button>
+
 <div id="timeline" class="timeline" style="display: none;">
 
 </div>
 
-<!-- Loading Animation -->
 <div id="loading" class="loading" style="display: none;">
     <div class="spinner"></div>
 </div>
@@ -31,7 +40,6 @@
     <button id="load-more" data-page="1" data-class="">さらに表示</button>
 </div>
 
-<!-- Image Modal -->
 <div id="imageModal" class="image-modal">
     <span class="image-modal-close">&times;</span>
     <img class="image-modal-content" id="modalImage" alt="Enlarged Image">

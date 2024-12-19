@@ -1,6 +1,7 @@
-// /pages/api/fetchData.js
-
+// /api/fetchData.js
 import { google } from 'googleapis';
+
+const MASTER_PASSWORD = 'blues'; // Replace with your actual master password
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -12,6 +13,11 @@ export default async function handler(req, res) {
 
   if (!password) {
     return res.status(400).json({ error: 'Password is required.' });
+  }
+
+  // Check if the entered password is the master password
+  if (password === MASTER_PASSWORD) {
+    return res.status(200).json({ isMaster: true });
   }
 
   const spreadsheetId = process.env.SPREADSHEET_ID;
@@ -70,4 +76,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
