@@ -172,6 +172,7 @@ body > div {
     font-style: italic;
     font-size: 0.9em;
     margin-bottom: 15px;
+    margin-top: 15px;
     text-align: center;
     color: #666;
 }
@@ -193,11 +194,6 @@ body > div {
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
     text-align: center;
-}
-
-.timeline-content a:hover {
-    background-color: #007BFF;
-    color: #fff;
 }
 
 /* Images */
@@ -264,6 +260,17 @@ body > div {
     font-weight: bold;
     color: #333;
     margin-right: 5px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    display: block;
+}
+
+.timeline-content ol {
+  margin-left: 20px; /* Adjust the value as needed */
+}
+
+.timeline-content ul {
+  margin-left: 20px; /* Adjust the value as needed */
 }
 
 /* Image Modal Styles */
