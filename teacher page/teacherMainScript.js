@@ -175,9 +175,10 @@ submitBtn.addEventListener('click', async () => {
     }
 
     const { processedData } = await response.json();
+processedData.teacher = selectedTeacher; // Add the selected teacher name here
 
-    // Update the Firestore document with processedData
-    await docRef.update({ processedData });
+// Update the Firestore document with processedData, including the teacher
+await docRef.update({ processedData });
 
     alert('Lesson Report submitted and processedData extracted successfully!');
   } catch (error) {
