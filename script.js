@@ -151,8 +151,9 @@ function createTimelineItem(report) {
     timelineContent.appendChild(homeworkLink);
   }
 
-  // Add processed data
+ // Add processed data
   const processedData = report.processedData;
+
   function appendSection(timelineContent, title, items, className) {
     const container = document.createElement('p');
 
@@ -160,10 +161,33 @@ function createTimelineItem(report) {
     label.classList.add(className);
     label.textContent = title + ': ';
 
-    const text = document.createTextNode(items.join(', '));
-
     container.appendChild(label);
-    container.appendChild(text);
+
+    // Check for specific sections and apply different formatting
+    if (title === 'レッスンの流れ') {
+      // Create a numbered list (ol)
+      const numberedList = document.createElement('ol');
+      items.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item;
+        numberedList.appendChild(listItem);
+      });
+      container.appendChild(numberedList);
+    } else if (title === 'フレーズ＆文') {
+      // Create a bullet list (ul)
+      const bulletList = document.createElement('ul');
+      items.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item;
+        bulletList.appendChild(listItem);
+      });
+      container.appendChild(bulletList);
+    } else {
+      // Default: display items as a comma-separated string
+      const text = document.createTextNode(items.join(', '));
+      container.appendChild(text);
+    }
+
     timelineContent.appendChild(container);
   }
 
