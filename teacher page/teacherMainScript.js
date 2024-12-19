@@ -100,8 +100,13 @@ submitBtn.addEventListener('click', async () => {
 
     // Convert YYYY-MM-DD to Timestamp
     const [year, month, day] = dateStr.split('-').map(Number);
-    const classDate = new Date(year, month - 1, day);
-    const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
+const classDate = new Date(year, month - 1, day);
+
+// Set the time to noon (12:00) to avoid timezone shifting issues
+classDate.setHours(12, 0, 0, 0);
+
+const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
+
 
     // Upload class pictures
     const pictureFiles = classPictures.files;
