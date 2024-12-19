@@ -231,6 +231,59 @@ if (backToStep4) {
   });
 }
 
+// Next button event listeners
+const nextFromStep1 = document.getElementById('nextFromStep1');
+if (nextFromStep1) {
+  nextFromStep1.addEventListener('click', () => {
+    if (teacherSelect.value !== '') {
+      step1.classList.remove('active');
+      step2.classList.add('active');
+    } else {
+      alert('Please select a teacher.');
+    }
+  });
+}
+
+const nextFromStep2 = document.getElementById('nextFromStep2');
+if (nextFromStep2) {
+  nextFromStep2.addEventListener('click', () => {
+    if (classSelect.value !== '') {
+      step2.classList.remove('active');
+      step3.classList.add('active');
+    } else {
+      alert('Please select a class.');
+    }
+  });
+}
+
+const nextFromStep3 = document.getElementById('nextFromStep3');
+if (nextFromStep3) {
+  nextFromStep3.addEventListener('click', () => {
+    // Check if event and classPictures are already selected
+    const classEventsSelect = document.getElementById('classEventsSelect');
+    if (classEventsSelect.value !== '' && classPictures.files.length > 0) {
+      step3.classList.remove('active');
+      step4.classList.add('active');
+    } else {
+      alert('Please select an event and upload class pictures.');
+    }
+  });
+}
+
+const nextFromStep4 = document.getElementById('nextFromStep4');
+if (nextFromStep4) {
+  nextFromStep4.addEventListener('click', () => {
+    // Check if lessonContents are already selected
+    if (lessonContents.files.length > 0) {
+      step4.classList.remove('active');
+      step5.classList.add('active');
+    } else {
+      alert('Please upload lesson contents.');
+    }
+  });
+}
+
+
 
 // Fetch classes from Firestore via the serverless endpoint
 async function populateClasses() {
