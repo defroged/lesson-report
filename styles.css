@@ -77,6 +77,18 @@ body > div {
     transition: background-color 0.3s, transform 0.3s;
 }
 
+#changeClassButton {
+    display: inline-block; /* Make the button visible */
+    font-size: 12px; /* Adjust the font size for a smaller button */
+    padding: 5px 10px; /* Smaller padding for a compact look */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
 .modal-content button:hover {
     background-color: #0056b3;
     transform: scale(1.05);
@@ -105,11 +117,18 @@ body > div {
 #classHeading {
     font-size: 2em;
     font-weight: bold;
-    margin: 40px;
     text-align: center;
     color: #333;
     border-bottom: 2px solid #ccc;
     padding-bottom: 20px;
+    flex-grow: 1; 
+    margin: 0;
+}
+
+.heading {
+    display: flex;
+    align-items: center; /* Vertically align button with text */
+    gap: 10px; /* Add space between the <h1> and button */
 }
 
 /* Timeline Items */
