@@ -426,3 +426,12 @@ body > div {
     }
 }
 
+.hidden-label {
+    font-weight: bold;
+    color: #dc2121;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    display: block;
+    
+}

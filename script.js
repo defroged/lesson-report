@@ -205,7 +205,7 @@ function createTimelineItem(report) {
   }
 
   if (isMaster && processedData.hidden && processedData.hidden.length > 0) {
-    appendSection(timelineContent, 'Hidden Content', processedData.hidden, 'hidden-label');
+    appendSection(timelineContent, 'Notes for teacher', processedData.hidden, 'hidden-label');
   }
   
   timelineItem.appendChild(timelineContent);
