@@ -80,11 +80,11 @@ body > div {
 #changeClassButton {
     display: inline-block; /* Make the button visible */
     font-size: 12px; /* Adjust the font size for a smaller button */
-    padding: 5px 10px; /* Smaller padding for a compact look */
+    padding: 5px 5px; /* Smaller padding for a compact look */
     background-color: #007BFF;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -110,7 +110,7 @@ body > div {
     display: none;
     max-width: 900px;
     width: 100%;
-    margin: 80px auto 40px auto;
+    margin: 30px auto 40px auto;
     padding: 0 20px;
 }
 
@@ -122,13 +122,14 @@ body > div {
     border-bottom: 2px solid #ccc;
     padding-bottom: 20px;
     flex-grow: 1; 
-    margin: 0;
+    margin-top: 46px;
 }
 
 .heading {
     display: flex;
-    align-items: center; /* Vertically align button with text */
-    gap: 10px; /* Add space between the <h1> and button */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Align heading and button to the left */
+    gap: 10px;
 }
 
 /* Timeline Items */
