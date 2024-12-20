@@ -204,6 +204,10 @@ function createTimelineItem(report) {
     appendSection(timelineContent, 'ことば', processedData.vocabulary, 'vocabulary-label');
   }
 
+  if (isMaster && processedData.hidden && processedData.hidden.length > 0) {
+    appendSection(timelineContent, 'Hidden Content', processedData.hidden, 'hidden-label');
+  }
+  
   timelineItem.appendChild(timelineContent);
   return timelineItem;
 }

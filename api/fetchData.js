@@ -1,7 +1,7 @@
 // /api/fetchData.js
 import { google } from 'googleapis';
 
-const MASTER_PASSWORD = 'blues'; // Replace with your actual master password
+const MASTER_PASSWORD = 'blues'; 
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -14,8 +14,6 @@ export default async function handler(req, res) {
   if (!password) {
     return res.status(400).json({ error: 'Password is required.' });
   }
-
-  // Check if the entered password is the master password
   if (password === MASTER_PASSWORD) {
     return res.status(200).json({ isMaster: true });
   }
@@ -32,20 +30,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Initialize Google Sheets API client
     const auth = new google.auth.JWT(
-      googleClientEmail, // Service account email
+      googleClientEmail, 
       null,
-      googlePrivateKey.replace(/\\n/g, '\n'), // Private key
+      googlePrivateKey.replace(/\\n/g, '\n'), 
       ['https://www.googleapis.com/auth/spreadsheets.readonly']
     );
 
     const sheets = google.sheets({ version: 'v4', auth });
-
-    // Define the range to fetch (columns A to M)
     const range = `${sheetName}!A:M`;
-
-    // Fetch data from Google Sheets
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
       range,
@@ -56,17 +49,13 @@ export default async function handler(req, res) {
     if (!data || data.length === 0) {
       return res.status(404).json({ error: 'No data found in the spreadsheet.' });
     }
-
-    // Skip the header row
     const rows = data.slice(1);
-
-    // Find the row where column M matches the provided password
     const match = rows.find(
       (row) => row[12] && row[12].trim() === password.trim()
     );
 
     if (match) {
-      const className = match[1] || 'No class name provided'; // Column B (index 1)
+      const className = match[1] || 'No class name provided'; 
       return res.status(200).json({ className });
     } else {
       return res.status(404).json({ error: 'Invalid password.' });

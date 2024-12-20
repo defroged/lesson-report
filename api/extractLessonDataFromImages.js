@@ -27,7 +27,16 @@ export default async function handler(req, res) {
       content: [
         {
           type: "text",
-          text: "Extract the requested data from these images and return ONLY pure JSON. Do not include triple backticks or code blocks. Use this JSON structure:\n{\n  \"activities\": [],\n  \"grammar\": [],\n  \"phrasesAndSentences\": [],\n  \"vocabulary\": []\n}\n\nImages:"
+          text: `Extract the requested data from these images and return ONLY pure JSON. Do not include triple backticks or code blocks. Use this JSON structure:
+          {
+            "activities": [],
+            "grammar": [],
+            "phrasesAndSentences": [],
+            "vocabulary": [],
+            "hidden": []
+          }
+          Specifically, for the "hidden" array, include any text that is colored red in the images.
+          Images:`
         },
         ...imageUrls.map(url => ({
           type: "image_url",
@@ -39,22 +48,27 @@ export default async function handler(req, res) {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o", 
+      model: "gpt-4o",
       messages
     });
 
     const content = completion.choices[0].message.content;
 
     // Try to parse the content as JSON
-    let processedData;
+    let data;
     try {
-      processedData = JSON.parse(content);
+      data = JSON.parse(content);
     } catch (err) {
       console.error('Failed to parse model output as JSON:', err);
       return res.status(500).json({ error: 'Model did not return valid JSON.' });
     }
 
-    return res.status(200).json({ processedData });
+    // Ensure the 'hidden' array exists
+    if (!data.hidden) {
+      data.hidden = [];
+    }
+
+    return res.status(200).json({ processedData: data, hidden: data.hidden });
 
   } catch (error) {
     console.error('Error calling OpenAI API:', error);

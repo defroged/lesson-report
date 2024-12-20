@@ -162,7 +162,8 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
         activities: [],
         grammar: [],
         phrasesAndSentences: [],
-        vocabulary: []
+        vocabulary: [],
+         hidden: [] // Initialize the hidden array
       }
     }, { merge: true });
 
@@ -179,11 +180,12 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
       return;
     }
 
-    const { processedData } = await response.json();
-processedData.teacher = selectedTeacher; // Add the selected teacher name here
-
-// Update the Firestore document with processedData, including the teacher
-await docRef.update({ processedData });
+    const { processedData, hidden } = await response.json(); // Extract hidden data as well
+    processedData.teacher = selectedTeacher; // Add the selected teacher name here
+    processedData.hidden = hidden || []; // Add the hidden array to processedData, default to empty if not provided
+    
+    // Update the Firestore document with processedData, including the teacher and hidden content
+    await docRef.update({ processedData });
 
     alert('Lesson Report submitted and processedData extracted successfully!');
   } catch (error) {
