@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>File Upload</title>
     <link rel="stylesheet" href="/upload/style.css">
 </head>
@@ -29,5 +29,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
     <script src="/upload/script.js"></script>
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var passwordInput = document.getElementById('passwordInput');
+            var viewportMeta = document.querySelector('meta[name="viewport"]');
+
+            if (passwordInput && viewportMeta) {
+                passwordInput.addEventListener('focus', function() {
+                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=10.0, user-scalable=1');
+                });
+
+                passwordInput.addEventListener('blur', function() {
+                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
