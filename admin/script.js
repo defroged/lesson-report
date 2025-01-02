@@ -60,6 +60,8 @@ function listFiles() {
 
 // Function to display a file item with preview and delete button
 function displayFile(itemRef, url) {
+    console.log("displayFile called for:", itemRef.name, "URL:", url); // Log at the start
+
     const fileItem = document.createElement('div');
     fileItem.classList.add('file-item');
 
@@ -67,22 +69,39 @@ function displayFile(itemRef, url) {
     fileName.textContent = itemRef.name;
     fileItem.appendChild(fileName);
 
-    // Create media element based on file type
-    let mediaElement;
+    // Check if we are dealing with a video file
     if (itemRef.name.endsWith('.mp4') || itemRef.name.endsWith('.webm')) {
-        mediaElement = document.createElement('video');
-        mediaElement.controls = true;
-    } else if (itemRef.name.endsWith('.mp3') || itemRef.name.endsWith('.wav')) {
-        mediaElement = document.createElement('audio');
-        mediaElement.controls = true;
-    }
+        console.log("Creating video element for:", itemRef.name); // Log before video creation
 
-    if (mediaElement) {
+        let mediaElement = document.createElement('video');
+        mediaElement.controls = true;
+        mediaElement.preload = 'metadata'; // Or 'auto'
+
+        console.log("Setting video source URL:", url); // Log before setting src
+
+        mediaElement.src = url;
+
+        // Error checking after setting src
+        if (!mediaElement.src) {
+            console.error("Failed to set video src for:", itemRef.name);
+            return; // Exit early if src is not set
+        }
+
+        // Append video to fileItem
+        console.log("Appending video element to fileItem"); // Log before append
+        fileItem.appendChild(mediaElement);
+
+    } else if (itemRef.name.endsWith('.mp3') || itemRef.name.endsWith('.wav')) {
+        // Handle audio files (this part seems to be working)
+        let mediaElement = document.createElement('audio');
+        mediaElement.controls = true;
         mediaElement.src = url;
         fileItem.appendChild(mediaElement);
+    } else {
+        console.log("Skipping non-media file:", itemRef.name); // Log for other file types
     }
 
-    // Delete button
+    // Delete button (no changes needed here)
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('delete-button');
     deleteButton.textContent = 'Delete';
@@ -91,6 +110,7 @@ function displayFile(itemRef, url) {
     });
     fileItem.appendChild(deleteButton);
 
+    console.log("Appending fileItem to fileList"); // Log before appending fileItem
     fileList.appendChild(fileItem);
 }
 
