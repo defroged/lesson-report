@@ -1,54 +1,147 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
-#password-container, #main-container {
+#password-container,
+#main-container {
     text-align: center;
+    max-width: 95%;
     margin: 20px auto;
     padding: 20px;
-    border: 1px solid #ccc;
-    width: 500px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#password-input {
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 80%;
+}
+
+#login-button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#login-button:hover {
+    background-color: #4cae4c;
+}
+
+#login-message {
+    color: red;
+    margin-top: 10px;
+}
+
+#file-list-container {
+    overflow-x: auto;
 }
 
 #file-list {
-    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 15px;
 }
 
 .file-item {
-    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 5px; /* Add rounded corners */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .file-item:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.file-item video, .file-item audio {
-    width: 100%;
-    max-width: 400px;
-}
-
-.delete-button {
-    background-color: #f05050;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-top: 10px; /* Add space above delete button */
-    border-radius: 3px; /* Rounded corners for button */
+.play-button {
+    width: 60px;
+    height: 60px;
+    background-color: #709fb0;
+    border-radius: 50%;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 10px auto;
+    transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+    background-color: #477d95;
+}
+
+.play-button svg {
+    fill: white;
+    width: 30px;
+    height: 30px;
 }
 
 .file-name {
-    font-size: 1.2em; /* Increase font size */
-    margin-bottom: 5px; /* Add some space between name and date */
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
 }
 
 .file-date {
     font-size: 0.9em;
-    color: #666; /* Lighter color for date */
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.delete-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #c9302c;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+
+    #password-container,
+    #main-container {
+        max-width: 95%;
+        margin: 10px auto;
+    }
+
+    #file-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .file-name {
+        font-size: 1em;
+    }
+
+    .file-date {
+        font-size: 0.8em;
+    }
 }

@@ -58,69 +58,46 @@ function listFiles() {
         });
 }
 
-// Function to display a file item with preview and delete button
+// Function to display a file item with a play button and delete button
 function displayFile(itemRef, url) {
-    console.log("displayFile called for:", itemRef.name, "URL:", url);
-
     const fileItem = document.createElement('div');
     fileItem.classList.add('file-item');
 
     // Extract name and date from filename
-    const fileNameParts = itemRef.name.split('_'); // Split by underscore
+    const fileNameParts = itemRef.name.split('_');
     const userName = fileNameParts[0];
-    const timestamp = fileNameParts.slice(1, -1).join('-'); // Join all parts except the first and last with a dash
-    
-    // Supported video file extensions:
-    const videoExtensions = ['.mp4', '.webm', '.mov', '.avi', '.mkv', '.flv'];
-
-    // Get the file extension (if any) and convert to lowercase
-    const fileExtension = itemRef.name.lastIndexOf('.') > 0
-        ? itemRef.name.substring(itemRef.name.lastIndexOf('.')).toLowerCase()
-        : '';
+    const timestamp = fileNameParts.slice(1, -1).join('-');
 
     // Create elements for name and date
     const nameElement = document.createElement('p');
     nameElement.classList.add('file-name');
     nameElement.textContent = userName;
-    nameElement.style.fontWeight = 'bold'; // Make name bold
 
     const dateElement = document.createElement('p');
     dateElement.classList.add('file-date');
-    dateElement.textContent = `(${timestamp})`; // Add brackets around the date
+    dateElement.textContent = `(${timestamp})`;
 
     // Add name and date to the file item
     fileItem.appendChild(nameElement);
     fileItem.appendChild(dateElement);
 
-    // Check if the file should be treated as a video
-    if (videoExtensions.includes(fileExtension) || fileExtension === '') {
-        console.log("Creating video element for:", itemRef.name);
+    // Create a play button
+    const playButton = document.createElement('div');
+    playButton.classList.add('play-button');
+    playButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M8 5v14l11-7z"/>
+            <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+    `;
 
-        let mediaElement = document.createElement('video');
-        mediaElement.controls = true;
-        mediaElement.preload = 'metadata'; // Or 'auto'
+    // Add click event to the play button to trigger download
+    playButton.addEventListener('click', () => {
+        window.location.href = url; // Redirect to the file URL for download
+    });
 
-        console.log("Setting video source URL:", url);
-
-        mediaElement.src = url;
-
-        if (!mediaElement.src) {
-            console.error("Failed to set video src for:", itemRef.name);
-            return;
-        }
-
-        console.log("Appending video element to fileItem");
-        fileItem.appendChild(mediaElement);
-
-    } else if (fileExtension === '.mp3' || fileExtension === '.wav') {
-        // Handle audio files
-        let mediaElement = document.createElement('audio');
-        mediaElement.controls = true;
-        mediaElement.src = url;
-        fileItem.appendChild(mediaElement);
-    } else {
-        console.log("Skipping non-media file:", itemRef.name);
-    }
+    // Add play button to the file item
+    fileItem.appendChild(playButton);
 
     // Delete button
     const deleteButton = document.createElement('button');
@@ -131,7 +108,6 @@ function displayFile(itemRef, url) {
     });
     fileItem.appendChild(deleteButton);
 
-    console.log("Appending fileItem to fileList");
     fileList.appendChild(fileItem);
 }
 
