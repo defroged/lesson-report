@@ -1,15 +1,16 @@
-// Initialize Firebase
+// Use the same Firebase configuration as your existing project
 const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+    apiKey: "AIzaSyCTdo6AfCDj3yVCnndBCIOrLRm7oOaDFW8", // Your API Key
+    authDomain: "bs-class-database.firebaseapp.com",
+    projectId: "bs-class-database",
+    storageBucket: "bs-class-database.firebasestorage.app",
+    messagingSenderId: "577863988524",
+    appId: "1:577863988524:web:dc28f58ed0350419d62889"
 };
 
+// Initialize Firebase app
 firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();
+const storage = firebase.storage(); // Get the storage object
 
 const passwordModal = document.getElementById('passwordModal');
 const passwordInput = document.getElementById('passwordInput');
@@ -41,7 +42,7 @@ submitPasswordButton.addEventListener('click', async () => {
             passwordError.textContent = 'Master password is not allowed for uploads.';
             return;
         }
-        userName = data.userName; 
+        userName = data.userName;
         passwordModal.style.display = 'none';
         uploadForm.classList.remove('hidden');
     } catch (error) {
@@ -61,7 +62,8 @@ uploadButton.addEventListener('click', async () => {
     const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
     const newFileName = `${userName}_${timestamp}_${file.name}`;
 
-    const storageRef = storage.ref(`uploads/${newFileName}`);
+    // Create a reference to the 'Ondoku' folder and the file
+    const storageRef = storage.ref(`Ondoku/${newFileName}`);
     const uploadTask = storageRef.put(file);
 
     uploadTask.on('state_changed',
