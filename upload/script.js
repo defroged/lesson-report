@@ -60,7 +60,7 @@ uploadButton.addEventListener('click', async () => {
 
         const now = new Date();
     const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-    const newFileName = `${userName}_${timestamp}_${file.name}`;
+    const newFileName = `${userName}_${timestamp}`;
 
     // Create a reference to the 'Ondoku' folder and the file
     const storageRef = storage.ref(`Ondoku/${newFileName}`);
