@@ -58,8 +58,8 @@ fileInput.addEventListener('change', async () => {
         return;
     }
 
-    const now = new Date();
-    const timestamp = `<span class="math-inline">\{now\.getFullYear\(\)\}\-</span>{String(now.getMonth() + 1).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getDate\(\)\)\.padStart\(2, '0'\)\}\_</span>{String(now.getHours()).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getMinutes\(\)\)\.padStart\(2, '0'\)\}\-</span>{String(now.getSeconds()).padStart(2, '0')}`;
+const now = new Date();
+    const timestamp = `<span class="math-inline">\{<1\>now\.getFullYear\(\)\}\-</span>{String(now.getMonth() + 1).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getDate\(\)\)\.padStart\(2, '0'\)\}\_</span>{String(now.getHours()).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getMinutes\(\)\)\.padStart\(2, '0'\)\}\-</span>{String(now.getSeconds()).padStart(2, '0')}`;
 
     // Get the original file extension
     const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
