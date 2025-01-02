@@ -58,4 +58,41 @@ button:hover {
 
 #uploadStatus {
     margin-top: 20px;
+    width: 100%; /* Make the progress bar container full width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+progress {
+    width: 80%; /* Adjust width as needed */
+    height: 25px;
+    border: none;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+    overflow: hidden;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2); /* Add a subtle inset shadow */
+}
+
+progress::-webkit-progress-bar {
+    background-color: #e0e0e0;
+}
+
+progress::-webkit-progress-value {
+    background-color: #4caf50; /* Modern green color */
+    border-radius: 20px; /* Match the bar's radius */
+    transition: width 0.4s ease-in-out; /* Smooth animation for progress */
+}
+
+progress::-moz-progress-bar {
+    /* Firefox */
+    background-color: #4caf50;
+    border-radius: 20px;
+    transition: width 0.4s ease-in-out;
+}
+
+#progressText {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #333;
 }

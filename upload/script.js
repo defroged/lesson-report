@@ -67,16 +67,31 @@ uploadButton.addEventListener('click', async () => {
     const uploadTask = storageRef.put(file);
 
     uploadTask.on('state_changed',
-        (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            uploadStatus.textContent = `Upload is ${progress}% done`;
-        },
-        (error) => {
-            console.error('Upload error:', error);
+    (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        // Ensure the progress bar and text are updated
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        if (progressBar && progressText) {
+            progressBar.value = progress;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+    },
+    (error) => {
+        console.error('Upload error:', error);
+        // Update the status in case of an error
+        const uploadStatus = document.getElementById('uploadStatus');
+        if (uploadStatus) {
             uploadStatus.textContent = 'Upload failed.';
-        },
-        () => {
+        }
+    },
+    () => {
+        // Update the status when upload is complete
+        const uploadStatus = document.getElementById('uploadStatus');
+        if (uploadStatus) {
             uploadStatus.textContent = 'Upload complete.';
         }
-    );
+    }
+);
 });

@@ -17,10 +17,13 @@
     </div>
 
     <div id="uploadForm" class="hidden">
-        <h2>Upload File</h2>
+        <h2>動画、または音源のファイルをアップロードしてください。</h2>
         <input type="file" id="fileInput" accept="audio/*, video/*">
         <button id="uploadButton">Upload</button>
-        <div id="uploadStatus"></div>
+        <div id="uploadStatus">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <span id="progressText">0%</span>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
