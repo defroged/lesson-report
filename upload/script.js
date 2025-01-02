@@ -58,7 +58,7 @@ uploadButton.addEventListener('click', async () => {
         return;
     }
 
-    const now = new Date();
+        const now = new Date();
     const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
     const newFileName = `${userName}_${timestamp}_${file.name}`;
 
@@ -66,32 +66,35 @@ uploadButton.addEventListener('click', async () => {
     const storageRef = storage.ref(`Ondoku/${newFileName}`);
     const uploadTask = storageRef.put(file);
 
-    uploadTask.on('state_changed',
-    (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // Ensure the progress bar and text are updated
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
+    // Show the progress bar
+    uploadStatus.classList.remove('hidden');
 
-        if (progressBar && progressText) {
-            progressBar.value = progress;
-            progressText.textContent = `${Math.round(progress)}%`;
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // Ensure the progress bar and text are updated
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            if (progressBar && progressText) {
+                progressBar.value = progress;
+                progressText.textContent = `${Math.round(progress)}%`;
+            }
+        },
+        (error) => {
+            console.error('アップロードエラー:', error);
+            // Update the status in case of an error
+            const uploadStatus = document.getElementById('uploadStatus');
+            if (uploadStatus) {
+                uploadStatus.textContent = 'アップロードに失敗しました。';
+            }
+        },
+        () => {
+            // Update the status when upload is complete
+            const uploadStatus = document.getElementById('uploadStatus');
+            if (uploadStatus) {
+                uploadStatus.textContent = 'アップロード完了';
+            }
         }
-    },
-    (error) => {
-        console.error('Upload error:', error);
-        // Update the status in case of an error
-        const uploadStatus = document.getElementById('uploadStatus');
-        if (uploadStatus) {
-            uploadStatus.textContent = 'Upload failed.';
-        }
-    },
-    () => {
-        // Update the status when upload is complete
-        const uploadStatus = document.getElementById('uploadStatus');
-        if (uploadStatus) {
-            uploadStatus.textContent = 'Upload complete.';
-        }
-    }
-);
+    );
 });
