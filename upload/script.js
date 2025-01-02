@@ -67,7 +67,7 @@ uploadButton.addEventListener('click', async () => {
     const uploadTask = storageRef.put(file);
 
     // Show the progress bar
-    uploadStatus.classList.remove('hidden');
+    uploadStatus.style.display = 'flex';
 
     uploadTask.on('state_changed',
         (snapshot) => {
