@@ -69,7 +69,14 @@ function displayFile(itemRef, url) {
     const fileNameParts = itemRef.name.split('_'); // Split by underscore
     const userName = fileNameParts[0];
     const timestamp = fileNameParts.slice(1, -1).join('-'); // Join all parts except the first and last with a dash
-    const fileExtension = fileNameParts.length > 1 ? fileNameParts[fileNameParts.length - 1] : ''; // Handle files with no extension
+    
+    // Supported video file extensions:
+    const videoExtensions = ['.mp4', '.webm', '.mov', '.avi', '.mkv', '.flv'];
+
+    // Get the file extension (if any) and convert to lowercase
+    const fileExtension = itemRef.name.lastIndexOf('.') > 0
+        ? itemRef.name.substring(itemRef.name.lastIndexOf('.')).toLowerCase()
+        : '';
 
     // Create elements for name and date
     const nameElement = document.createElement('p');
@@ -85,39 +92,37 @@ function displayFile(itemRef, url) {
     fileItem.appendChild(nameElement);
     fileItem.appendChild(dateElement);
 
-    // Check if we are dealing with a video file
-    if (itemRef.name.endsWith('.mp4') || itemRef.name.endsWith('.webm')) {
-        console.log("Creating video element for:", itemRef.name); // Log before video creation
+    // Check if the file should be treated as a video
+    if (videoExtensions.includes(fileExtension) || fileExtension === '') {
+        console.log("Creating video element for:", itemRef.name);
 
         let mediaElement = document.createElement('video');
         mediaElement.controls = true;
         mediaElement.preload = 'metadata'; // Or 'auto'
 
-        console.log("Setting video source URL:", url); // Log before setting src
+        console.log("Setting video source URL:", url);
 
         mediaElement.src = url;
 
-        // Error checking after setting src
         if (!mediaElement.src) {
             console.error("Failed to set video src for:", itemRef.name);
-            return; // Exit early if src is not set
+            return;
         }
 
-        // Append video to fileItem
-        console.log("Appending video element to fileItem"); // Log before append
+        console.log("Appending video element to fileItem");
         fileItem.appendChild(mediaElement);
 
-    } else if (itemRef.name.endsWith('.mp3') || itemRef.name.endsWith('.wav')) {
-        // Handle audio files (this part seems to be working)
+    } else if (fileExtension === '.mp3' || fileExtension === '.wav') {
+        // Handle audio files
         let mediaElement = document.createElement('audio');
         mediaElement.controls = true;
         mediaElement.src = url;
         fileItem.appendChild(mediaElement);
     } else {
-        console.log("Skipping non-media file:", itemRef.name); // Log for other file types
+        console.log("Skipping non-media file:", itemRef.name);
     }
 
-    // Delete button (no changes needed here)
+    // Delete button
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('delete-button');
     deleteButton.textContent = 'Delete';
@@ -126,7 +131,7 @@ function displayFile(itemRef, url) {
     });
     fileItem.appendChild(deleteButton);
 
-    console.log("Appending fileItem to fileList"); // Log before appending fileItem
+    console.log("Appending fileItem to fileList");
     fileList.appendChild(fileItem);
 }
 

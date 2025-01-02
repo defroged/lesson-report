@@ -40,6 +40,7 @@ body {
     cursor: pointer;
     margin-top: 10px; /* Add space above delete button */
     border-radius: 3px; /* Rounded corners for button */
+    display: flex;
 }
 
 .file-name {
