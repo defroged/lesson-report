@@ -60,14 +60,30 @@ function listFiles() {
 
 // Function to display a file item with preview and delete button
 function displayFile(itemRef, url) {
-    console.log("displayFile called for:", itemRef.name, "URL:", url); // Log at the start
+    console.log("displayFile called for:", itemRef.name, "URL:", url);
 
     const fileItem = document.createElement('div');
     fileItem.classList.add('file-item');
 
-    const fileName = document.createElement('p');
-    fileName.textContent = itemRef.name;
-    fileItem.appendChild(fileName);
+    // Extract name and date from filename
+    const fileNameParts = itemRef.name.split('_'); // Split by underscore
+    const userName = fileNameParts[0];
+    const timestamp = fileNameParts.slice(1, -1).join('-'); // Join all parts except the first and last with a dash
+    const fileExtension = fileNameParts.length > 1 ? fileNameParts[fileNameParts.length - 1] : ''; // Handle files with no extension
+
+    // Create elements for name and date
+    const nameElement = document.createElement('p');
+    nameElement.classList.add('file-name');
+    nameElement.textContent = userName;
+    nameElement.style.fontWeight = 'bold'; // Make name bold
+
+    const dateElement = document.createElement('p');
+    dateElement.classList.add('file-date');
+    dateElement.textContent = `(${timestamp})`; // Add brackets around the date
+
+    // Add name and date to the file item
+    fileItem.appendChild(nameElement);
+    fileItem.appendChild(dateElement);
 
     // Check if we are dealing with a video file
     if (itemRef.name.endsWith('.mp4') || itemRef.name.endsWith('.webm')) {
