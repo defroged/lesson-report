@@ -9,22 +9,21 @@
 <body>
     <div id="passwordModal" class="modal">
         <div class="modal-content">
-            <h2>Enter Password</h2>
+            <h2>４桁のID番号を入力してください</h2>
             <input type="password" id="passwordInput" placeholder="Enter password">
-            <button id="submitPassword">Submit</button>
+            <button id="submitPassword">OK</button>
             <div id="passwordError" class="error"></div>
         </div>
     </div>
 
     <div id="uploadForm" class="hidden">
-        <h2>動画、または音源のファイルをアップロードしてください。</h2>
-        <input type="file" id="fileInput" accept="audio/*, video/*">
-        <button id="uploadButton">Upload</button>
-		<div id="uploadStatus" style="display: none;">
-            <progress id="progressBar" value="0" max="100"></progress>
-            <span id="progressText">0%</span>
-        </div>
+    <h2>動画、または音源をアップロードしてください。</h2>
+    <input type="file" id="fileInput" accept="audio/*, video/*">
+    <div id="uploadStatus" style="display: none;">
+        <progress id="progressBar" value="0" max="100"></progress>
+        <span id="progressText">0%</span>
     </div>
+</div>
 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>

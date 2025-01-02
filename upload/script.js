@@ -51,7 +51,7 @@ submitPasswordButton.addEventListener('click', async () => {
     }
 });
 
-uploadButton.addEventListener('click', async () => {
+fileInput.addEventListener('change', async () => {
     const file = fileInput.files[0];
     if (!file) {
         uploadStatus.textContent = 'Please select a file.';
@@ -59,13 +59,13 @@ uploadButton.addEventListener('click', async () => {
     }
 
     const now = new Date();
-    const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+    const timestamp = `<span class="math-inline">\{now\.getFullYear\(\)\}\-</span>{String(now.getMonth() + 1).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getDate\(\)\)\.padStart\(2, '0'\)\}\_</span>{String(now.getHours()).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getMinutes\(\)\)\.padStart\(2, '0'\)\}\-</span>{String(now.getSeconds()).padStart(2, '0')}`;
 
     // Get the original file extension
     const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
 
     // Create the new filename with the original extension
-    const newFileName = `${userName}_${timestamp}${fileExtension}`;
+    const newFileName = `<span class="math-inline">\{userName\}\_</span>{timestamp}${fileExtension}`;
 
     // Create a reference to the 'Ondoku' folder and the file
     const storageRef = storage.ref(`Ondoku/${newFileName}`);
