@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ondoku File Manager</title>
+    <link rel="stylesheet" type="text/css" href="/admin/style.css">
+</head>
+<body>
+    <div id="password-container">
+        <h2>Enter Password</h2>
+        <input type="password" id="password-input">
+        <button id="login-button">Login</button>
+        <p id="login-message"></p>
+    </div>
+
+    <div id="main-container" style="display: none;">
+        <h1>Ondoku File Manager</h1>
+        <div id="file-list"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
+    <script src="/admin/script.js"></script>
+</body>
+</html>
