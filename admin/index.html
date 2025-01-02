@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ondoku File Manager</title>
     <link rel="stylesheet" type="text/css" href="/admin/style.css">
 </head>
@@ -24,5 +24,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
     <script src="/admin/script.js"></script>
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var passwordInput = document.getElementById('password-input');
+            var viewportMeta = document.querySelector('meta[name="viewport"]');
+
+            if (passwordInput && viewportMeta) {
+                passwordInput.addEventListener('focus', function() {
+                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+                });
+
+                passwordInput.addEventListener('blur', function() {
+                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
