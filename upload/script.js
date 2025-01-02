@@ -58,17 +58,17 @@ fileInput.addEventListener('change', async () => {
         return;
     }
 
-const now = new Date();
-    const timestamp = `<span class="math-inline">\{<1\>now\.getFullYear\(\)\}\-</span>{String(now.getMonth() + 1).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getDate\(\)\)\.padStart\(2, '0'\)\}\_</span>{String(now.getHours()).padStart(2, '0')}-<span class="math-inline">\{String\(now\.getMinutes\(\)\)\.padStart\(2, '0'\)\}\-</span>{String(now.getSeconds()).padStart(2, '0')}`;
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
 
     // Get the original file extension
     const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
 
     // Create the new filename with the original extension
-    const newFileName = `<span class="math-inline">\{userName\}\_</span>{timestamp}${fileExtension}`;
+    const newFileName = `${userName}_${timestamp}${fileExtension}`; // Correct: No HTML, correct template literal
 
     // Create a reference to the 'Ondoku' folder and the file
-    const storageRef = storage.ref(`Ondoku/${newFileName}`);
+    const storageRef = storage.ref(`Ondoku/${newFileName}`); // Correct: Template literal used correctly
     const uploadTask = storageRef.put(file);
 
     // Show the progress bar
@@ -94,7 +94,7 @@ const now = new Date();
                 uploadStatus.textContent = 'Upload failed.';
             }
         },
-                () => {
+        () => {
             // Hide the upload form and show the success message
             uploadForm.style.display = 'none';
             successMessage.classList.remove('hidden');
