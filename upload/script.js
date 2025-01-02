@@ -58,9 +58,14 @@ uploadButton.addEventListener('click', async () => {
         return;
     }
 
-        const now = new Date();
+    const now = new Date();
     const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-    const newFileName = `${userName}_${timestamp}`;
+
+    // Get the original file extension
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
+
+    // Create the new filename with the original extension
+    const newFileName = `${userName}_${timestamp}${fileExtension}`;
 
     // Create a reference to the 'Ondoku' folder and the file
     const storageRef = storage.ref(`Ondoku/${newFileName}`);
@@ -82,18 +87,18 @@ uploadButton.addEventListener('click', async () => {
             }
         },
         (error) => {
-            console.error('アップロードエラー:', error);
+            console.error('Upload error:', error);
             // Update the status in case of an error
             const uploadStatus = document.getElementById('uploadStatus');
             if (uploadStatus) {
-                uploadStatus.textContent = 'アップロードに失敗しました。';
+                uploadStatus.textContent = 'Upload failed.';
             }
         },
         () => {
             // Update the status when upload is complete
             const uploadStatus = document.getElementById('uploadStatus');
             if (uploadStatus) {
-                uploadStatus.textContent = 'アップロード完了';
+                uploadStatus.textContent = 'Upload complete';
             }
         }
     );
