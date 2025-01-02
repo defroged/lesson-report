@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/upload/style.css">
 </head>
 <body>
+    <img src="/upload/LOGO.png" alt="Logo" id="logo" style="position: absolute; top: 10px; left: 10px; max-height: 50px;">
     <div id="passwordModal" class="modal">
         <div class="modal-content">
             <h2>４桁のID番号を入力してください</h2>
@@ -17,13 +18,17 @@
     </div>
 
     <div id="uploadForm" class="hidden">
-    <h2>動画、または音源をアップロードしてください。</h2>
-    <input type="file" id="fileInput" accept="audio/*, video/*">
-    <div id="uploadStatus" style="display: none;">
-        <progress id="progressBar" value="0" max="100"></progress>
-        <span id="progressText">0%</span>
+        <h2>動画、または音源をアップロードしてください。</h2>
+        <input type="file" id="fileInput" accept="audio/*, video/*">
+        <div id="uploadStatus" style="display: none;">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <span id="progressText">0%</span>
+        </div>
     </div>
-</div>
+
+    <div id="successMessage" class="hidden" style="text-align: center;">
+        <h1>Thank you!</h1>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>

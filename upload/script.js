@@ -94,12 +94,10 @@ fileInput.addEventListener('change', async () => {
                 uploadStatus.textContent = 'Upload failed.';
             }
         },
-        () => {
-            // Update the status when upload is complete
-            const uploadStatus = document.getElementById('uploadStatus');
-            if (uploadStatus) {
-                uploadStatus.textContent = 'Upload complete';
-            }
+                () => {
+            // Hide the upload form and show the success message
+            uploadForm.style.display = 'none';
+            successMessage.classList.remove('hidden');
         }
     );
 });
