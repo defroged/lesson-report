@@ -233,6 +233,7 @@ async function handleMasterLogin() {
   const classSelectDropdown = document.getElementById('classSelectDropdown');
   classSelectDropdown.innerHTML = ''; // Clear existing options
 
+  // Populate dropdown with class names
   classNames.forEach(className => {
     const option = document.createElement('option');
     option.value = className;
@@ -240,10 +241,19 @@ async function handleMasterLogin() {
     classSelectDropdown.appendChild(option);
   });
 
+  // Add event listener for dropdown selection change
+  classSelectDropdown.addEventListener('change', async () => {
+    const selectedClass = classSelectDropdown.value;
+    if (selectedClass) {
+      await handleClassSelection(selectedClass); // Load the timeline for the selected class
+    }
+  });
+
   document.getElementById('passwordModal').style.display = 'none';
   document.getElementById('classSelectionModal').style.display = 'flex';
   document.getElementById('changeClassButton').style.display = 'inline-block'; // Show changeClassButton for admin
 }
+
 
 async function handleClassSelection(selectedClass) {
   document.getElementById('passwordModal').style.display = 'none';
@@ -294,12 +304,6 @@ async function checkPassword() {
 
 // Event listener for password submission
 document.getElementById('submitPasswordButton').addEventListener('click', checkPassword);
-
-// Event listener for class selection
-document.getElementById('submitClassButton').addEventListener('click', async () => {
-  const selectedClass = document.getElementById('classSelectDropdown').value;
-  await handleClassSelection(selectedClass);
-});
 
 // Event listener for change class button
 document.getElementById('changeClassButton').addEventListener('click', () => {
