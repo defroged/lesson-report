@@ -21,30 +21,52 @@ export default async function handler(req, res) {
     apiKey: process.env.OPENAI_API_KEY
   });
 
-  const messages = [
+const messages = [
     {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: `Extract the requested data from these images and return ONLY pure JSON. Do not include triple backticks or code blocks. Use this JSON structure:
-          {
-            "activities": [],
-            "grammar": [],
-            "phrasesAndSentences": [],
-            "vocabulary": [],
-            "hidden": []
-          }
-          Specifically, for the "hidden" array, include any text that is colored red in the images.
-          Images:`
-        },
-        ...imageUrls.map(url => ({
-          type: "image_url",
-          image_url: { url }
-        }))
-      ],
+        role: "user",
+        content: [
+            {
+                type: "text",
+                text: `Extract the requested data from these images and return ONLY pure JSON. Do not include triple backticks or code blocks. Use this JSON structure:
+                {
+                    "activities": [],
+                    "grammar": [],
+                    "phrasesAndSentences": [],
+                    "vocabulary": [],
+                    "hidden": []
+                }
+                Follow these instructions:
+                
+                1. For images of the lesson plan template:
+                    - Extract text from the "Lesson Plan" section and populate the "activities" array.
+                    - Extract text from the "Grammar" section and populate the "grammar" array.
+                    - Extract text from the "Sentences" section and populate the "phrasesAndSentences" array.
+                    - Extract text from the "Vocabulary" section and populate the "vocabulary" array.
+                    - Extract text from the "Notes" section and populate the "hidden" array. 
+                      (This array is exclusively for text from the "Notes" section of the lesson plan.)
+                
+                2. For other images (e.g., whiteboards, flashcards, worksheets, etc.):
+                    - Analyze the content and categorize text appropriately into one or more of the arrays:
+                        - Add sentences verbatim from whiteboards to the "phrasesAndSentences" array.
+                        - Identify and add studied grammar concepts (e.g., verb tenses, adjectives) to the "grammar" array.
+                        - Extract vocabulary items (e.g., flashcards of nouns, adjectives, etc.) and add them to the "vocabulary" array.
+                        - Add any relevant activities or exercises to the "activities" array.
+                
+                3. Ensure that grammar concepts inferred from the content (e.g., "present perfect tense" from sentences) are added to the "grammar" array.
+                4. Think logically and categorize text based on its context. For example:
+                    - Adjectives from flashcards should go to both "vocabulary" (as words) and "grammar" (as "adjectives").
+                    - Sentences written on the whiteboard should go to "phrasesAndSentences," and their grammatical structure (e.g., "past continuous tense") should go to "grammar."
+                
+                Images:`
+            },
+            ...imageUrls.map(url => ({
+                type: "image_url",
+                image_url: { url }
+            }))
+        ]
     }
-  ];
+];
+
 
   try {
     const completion = await openai.chat.completions.create({
