@@ -151,7 +151,7 @@ function createTimelineItem(report) {
     timelineContent.appendChild(homeworkLink);
   }
 
- // Add processed data
+  // Add processed data
   const processedData = report.processedData;
 
   function appendSection(timelineContent, title, items, className) {
@@ -254,16 +254,15 @@ async function handleMasterLogin() {
   document.getElementById('changeClassButton').style.display = 'inline-block'; // Show changeClassButton for admin
 }
 
-
 async function handleClassSelection(selectedClass) {
+  // The timeline will be displayed here, so hide the loading spinner at the end
+  const loading = document.getElementById('loading');
+  loading.style.display = 'flex'; 
+
   document.getElementById('passwordModal').style.display = 'none';
   document.getElementById('classSelectionModal').style.display = 'none';
   document.getElementById('timeline').innerHTML = ''; // Clear existing timeline content
   document.getElementById('timeline').style.display = 'block';
-
-  // Show loading animation
-  const loading = document.getElementById('loading');
-  loading.style.display = 'flex';
 
   document.getElementById('classHeading').textContent = `${selectedClass} - Lesson Report`;
 
@@ -283,22 +282,35 @@ async function handleClassSelection(selectedClass) {
   loadMoreContainer.style.display = 'flex';
 }
 
+// Updated checkPassword function to disable the OK button and show loading
 async function checkPassword() {
+  const submitButton = document.getElementById('submitPasswordButton');
   const passwordInput = document.getElementById('passwordInput').value;
+  const loading = document.getElementById('loading');
 
   if (!passwordInput) {
     showNotification('４桁のID番号を入力してください。', 'error');
     return;
   }
 
+  // Disable OK button and show loading
+  submitButton.disabled = true;
+  loading.style.display = 'flex';
+
   const className = await fetchData(passwordInput);
 
   if (isMaster) {
+    // Proceed to master login
     handleMasterLogin();
   } else if (className) {
+    // Proceed to normal login
     handleClassSelection(className);
   } else {
+    // Invalid password
     showNotification('無効なパスワードです。もう一度入力してください。', 'error');
+    // Hide loading, re-enable the button for retry
+    loading.style.display = 'none';
+    submitButton.disabled = false;
   }
 }
 
