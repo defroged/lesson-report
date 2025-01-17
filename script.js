@@ -315,7 +315,15 @@ async function checkPassword() {
 }
 
 // Event listener for password submission
-document.getElementById('submitPasswordButton').addEventListener('click', checkPassword);
+document.getElementById('submitPasswordButton').addEventListener('click', async () => {
+  // Force the input field to lose focus
+  const passwordInput = document.getElementById('passwordInput');
+  passwordInput.blur();
+
+  // Then call the function to check the password
+  await checkPassword();
+});
+
 
 // Event listener for change class button
 document.getElementById('changeClassButton').addEventListener('click', () => {
