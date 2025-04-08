@@ -5,7 +5,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCTdo6AfCDj3yVCnndBCIOrLRm7oOaDFW8",
   authDomain: "bs-class-database.firebaseapp.com",
   projectId: "bs-class-database",
-  storageBucket: "bs-class-database.firebasestorage.app", // Check correctness
+  storageBucket: "bs-class-database.firebasestorage.app",
   messagingSenderId: "577863988524",
   appId: "1:577863988524:web:dc28f58ed0350419d62889"
 };
@@ -140,7 +140,7 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
       if (!response.ok) {
         console.error('Error uploading to Cloudinary:', await response.text());
         alert('Error uploading lesson content image.');
-        loadingOverlay.style.display = 'none'; // Hide loading overlay on error
+        loadingOverlay.style.display = 'none'; 
         return;
       }
 
