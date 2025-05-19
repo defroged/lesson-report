@@ -107,14 +107,6 @@ async function fetchLessonReports(className, page = 1, limit = 10) {
 }
 
 function createTimelineItem(report) {
-  // START OF DEBUG LOGS
-  console.log('--- createTimelineItem Start for report ID:', report.id, 'Date:', report.date, '---');
-  // console.log('Full report object received:', JSON.parse(JSON.stringify(report))); // Deep copy for logging, can be verbose
-  console.log('Report homeworkURL:', report.homeworkURL); // Log homeworkURL
-  console.log('Report audioURL:', report.audioURL);       // Log audioURL
-  console.log('Type of report.audioURL:', typeof report.audioURL);
-  // END OF DEBUG LOGS
-
   const timelineItem = document.createElement('div');
   timelineItem.classList.add('timeline-item');
 
@@ -158,49 +150,27 @@ function createTimelineItem(report) {
   let contentAddedToMediaActions = false;
 
   if (report.homeworkURL && typeof report.homeworkURL === 'string' && report.homeworkURL.trim() !== '') {
-    console.log('HomeworkURL IS present: "' + report.homeworkURL + '". Creating link.'); // DEBUG
     const homeworkLink = document.createElement('a');
     homeworkLink.href = report.homeworkURL;
     homeworkLink.textContent = '今日の宿題';
     homeworkLink.target = '_blank';
     mediaActionsContainer.appendChild(homeworkLink);
     contentAddedToMediaActions = true;
-  } else {
-    console.log('HomeworkURL is NOT present or is empty. Link not created. Value: ', report.homeworkURL); // DEBUG
   }
 
-  // DEBUGGING LOGS FOR AUDIO PLAYER CONDITION
-  console.log('Attempting to add audio player. Current audioURL value is: "' + report.audioURL + '"');
-  let audioConditionMet = false;
-  // Robust check for audioURL
   if (report.audioURL && typeof report.audioURL === 'string' && report.audioURL.trim() !== '') {
-    audioConditionMet = true;
-    console.log('CONDITION MET for audio player: AudioURL is present and not an empty string. Creating player.');
     const audioPlayer = document.createElement('audio');
     audioPlayer.controls = true;
     audioPlayer.src = report.audioURL;
-    audioPlayer.style.maxWidth = '300px';
+	audioPlayer.classList.add('custom-audio-player');
     const unsupportedMessage = document.createTextNode('Your browser does not support the audio element.');
     audioPlayer.appendChild(unsupportedMessage);
     mediaActionsContainer.appendChild(audioPlayer);
     contentAddedToMediaActions = true;
-  } else {
-    console.log('CONDITION NOT MET for audio player.');
-    if (report.audioURL === null) console.log('Reason: audioURL is null');
-    else if (report.audioURL === undefined) console.log('Reason: audioURL is undefined');
-    else if (typeof report.audioURL !== 'string') console.log('Reason: audioURL is not a string. Type is: ' + typeof report.audioURL);
-    else if (report.audioURL && report.audioURL.trim() === '') console.log('Reason: audioURL is an empty string or contains only whitespace.'); // Check if it's a string first
-    else if (!report.audioURL) console.log('Reason: audioURL is falsy (e.g., empty string, undefined, null). Value: "' + report.audioURL + '"');
-    else console.log('Reason: audioURL condition not met for other reasons. Value: "' + report.audioURL + '"');
   }
-  console.log('Audio condition met status:', audioConditionMet);
-  // END OF DEBUGGING LOGS FOR AUDIO PLAYER
 
   if (contentAddedToMediaActions) {
-    console.log('Appending mediaActionsContainer to timelineContent because contentAddedToMediaActions is true.'); // DEBUG
     timelineContent.appendChild(mediaActionsContainer);
-  } else {
-    console.log('NOT appending mediaActionsContainer as contentAddedToMediaActions is false.'); // DEBUG
   }
 
   const processedData = report.processedData;
@@ -230,7 +200,7 @@ function createTimelineItem(report) {
       const text = document.createTextNode(items.join(', '));
       container.appendChild(text);
     }
-    tc.appendChild(container); // Use the passed parameter 'tc'
+    tc.appendChild(container);
   }
 
   if (processedData.activities) {
@@ -243,17 +213,14 @@ function createTimelineItem(report) {
     appendSection(timelineContent, 'フレーズ＆文', processedData.phrasesAndSentences, 'phrases-label');
   }
   if (processedData.vocabulary) {
-    // Corrected label from '単語' to 'ことば' to match previous context if intended, or keep '単語' if that's correct now.
-    // Assuming 'ことば' was the original intent for consistency with your other code samples for 'vocabulary-label'.
     appendSection(timelineContent, 'ことば', processedData.vocabulary, 'vocabulary-label');
   }
 
   if (isMaster && processedData.hidden && processedData.hidden.length > 0) {
     appendSection(timelineContent, 'Notes for teacher', processedData.hidden, 'hidden-label');
   }
-  
+
   timelineItem.appendChild(timelineContent);
-  console.log('--- createTimelineItem End for report ID:', report.id, '---'); // DEBUG
   return timelineItem;
 }
 

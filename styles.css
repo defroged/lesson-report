@@ -216,6 +216,66 @@ body > div {
     text-align: center;
 }
 
+/* audio player */
+
+.custom-audio-player {
+  width: 100%; /* Or a specific width like 300px */
+  max-width: 350px; /* Overrides the inline style if you remove it from JS */
+  height: 50px; /* Adjust as needed */
+  border-radius: 25px; /* Rounded corners for the player */
+  border: 1px solid #ccc; /* A light border */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* A subtle shadow */
+  margin-top: 10px; /* Space above the player */
+  margin-bottom: 10px; /* Space below the player */
+  background-color: #f0f0f0; /* A light background for the player */
+}
+
+/*
+  Styling specific parts of the audio player (pseudo-elements)
+  has limited and inconsistent browser support.
+  The following are common examples but might not work perfectly everywhere.
+*/
+
+/* For WebKit browsers (Chrome, Safari, Edge Chromium) */
+.custom-audio-player::-webkit-media-controls-panel {
+  background-color: #e0e0e0; /* Background of the control panel */
+  border-radius: 25px;
+  color: #333; /* Color of icons and text (might not be effective) */
+}
+
+.custom-audio-player::-webkit-media-controls-play-button {
+  background-color: #4CAF50; /* Green play button */
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.custom-audio-player::-webkit-media-controls-play-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.custom-audio-player::-webkit-media-controls-volume-slider {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 0 5px;
+}
+
+.custom-audio-player::-webkit-media-controls-current-time-display,
+.custom-audio-player::-webkit-media-controls-time-remaining-display {
+  color: #333; /* Color of the time text */
+  font-size: 14px;
+  padding: 0 5px;
+}
+
+/* For Firefox (limited styling capabilities) */
+/* Firefox does not offer as much direct control via CSS pseudo-elements for the audio player parts */
+/* You might need to wrap the audio element in a div and style the div,
+   or rely on JavaScript for deeper customization if these don't work. */
+
+.custom-audio-player {
+  /* Firefox might respect general container styles better */
+  padding: 5px; /* Add some internal padding if needed */
+}
+
 /* Images */
 .timeline-content .timeline-gallery {
     display: grid;
