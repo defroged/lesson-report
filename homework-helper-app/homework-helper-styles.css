@@ -1,0 +1,196 @@
+/* homework-helper-styles.css */
+
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top for longer content */
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 25px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 550px;
+    margin-top: 30px;
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 2em;
+}
+
+p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    font-size: 1.1em;
+}
+
+.upload-section {
+    margin-bottom: 10px; /* Reduced margin */
+}
+
+input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.file-upload-label {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.file-upload-label:hover {
+    background-color: #2980b9;
+}
+
+.file-name-display {
+    margin-top: 8px; /* Add some space above the file name */
+    margin-bottom: 20px; /* Space below the file name */
+    font-style: italic;
+    color: #7f8c8d;
+    min-height: 1.2em; /* Reserve space even if empty */
+}
+
+
+button {
+    background-color: #27ae60; /* Green */
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #229954;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0px);
+}
+
+
+button:disabled {
+    background-color: #bdc3c7; /* Light grey */
+    cursor: not-allowed;
+    transform: none;
+}
+
+#resultsArea {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1; /* Light separator */
+}
+
+#audioPlayerContainer audio {
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.error-message {
+    color: #e74c3c; /* Red */
+    background-color: #fdedec; /* Light pink background */
+    border: 1px solid #f5b7b1; /* Light red border */
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#loadingIndicator {
+    margin: 25px 0;
+}
+
+#loadingIndicator p {
+    font-size: 1.1em;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.spinner {
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-left-color: #3498db; /* Blue */
+    margin: 0 auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Styles for the Copy URL Button */
+#copyUrlButton {
+    background-color: #f39c12; /* Orange color to differentiate from the main button */
+    color: white;
+    border: none;
+    padding: 10px 20px;       /* Adjust padding as needed */
+    text-align: center;
+    text-decoration: none;
+    display: block;           /* Make it a block element for centering with margin auto */
+    font-size: 0.9em;         /* Slightly smaller font */
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin: 15px auto 10px;   /* Top margin, auto for left/right, bottom margin */
+    width: auto;              /* Auto width based on content and padding */
+    max-width: 200px;         /* Maximum width for the button */
+}
+
+#copyUrlButton:hover {
+    background-color: #e67e22; /* Darker orange on hover */
+    transform: translateY(-1px);
+}
+
+#copyUrlButton:active {
+    transform: translateY(0px);
+}
+
+#copyUrlButton:disabled {
+    background-color: #bdc3c7; /* Light grey when disabled */
+    cursor: not-allowed;
+    transform: none;
+}

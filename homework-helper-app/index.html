@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宿題ヘルパーAI</title>
+    <link rel="stylesheet" href="/homework-helper-app/homework-helper-styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>宿題ヘルパーAI 🤖</h1>
+        <p>宿題の写真をアップロードしてね。AIがやさしく説明するよ！</p>
+
+                    <div class="upload-section">
+                <input type="file" id="homeworkImage" accept="image/png, image/jpeg, image/webp, image/gif" multiple>
+                <label for="homeworkImage" class="file-upload-label">画像を選ぶ</label>
+            </div>
+        <div id="fileName" class="file-name-display"></div>
+
+        <button id="getHelpButton" disabled>説明をおねがい！</button>
+
+        <div id="loadingIndicator" style="display:none;">
+            <p>AIががんばって考えてるよ...</p>
+            <div class="spinner"></div>
+        </div>
+
+        <div id="resultsArea">
+            <div id="audioPlayerContainer">
+                </div>
+            <button id="copyUrlButton" style="display:none;">URLをコピー</button> <p id="errorMessage" class="error-message" style="display:none;"></p>
+        </div>
+    </div>
+
+    <script src="/homework-helper-app/homeworkHelper.js"></script>
+</body>
+</html>
