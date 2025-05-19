@@ -143,32 +143,48 @@ function createTimelineItem(report) {
   postedBy.textContent = `先生： ${report.processedData.teacher || 'Unknown'}`;
   timelineContent.appendChild(postedBy);
 
+  // Container for homework link and audio player for side-by-side layout
+  const mediaActionsContainer = document.createElement('div');
+  mediaActionsContainer.style.display = 'flex'; // Use flexbox for side-by-side
+  mediaActionsContainer.style.flexWrap = 'wrap'; // Allow items to wrap on smaller screens
+  mediaActionsContainer.style.alignItems = 'center'; // Vertically align items
+  mediaActionsContainer.style.gap = '15px'; // Adds space between the homework link and audio player
+  mediaActionsContainer.style.marginTop = '10px'; // Space above this container
+
+  let contentAddedToMediaActions = false;
+
   if (report.homeworkURL) {
     const homeworkLink = document.createElement('a');
     homeworkLink.href = report.homeworkURL;
     homeworkLink.textContent = '今日の宿題';
     homeworkLink.target = '_blank';
-    homeworkLink.style.display = 'block'; // Ensure it's a block for consistent layout
-    homeworkLink.style.marginBottom = '10px'; // Add some space below if both URL and audio exist
-    timelineContent.appendChild(homeworkLink);
+    // No specific styling like display:block or margin-bottom needed here
+    // as flex container will manage its layout.
+    mediaActionsContainer.appendChild(homeworkLink);
+    contentAddedToMediaActions = true;
   }
 
   // Display audio player if audioURL exists
   if (report.audioURL && report.audioURL.trim() !== '') {
-    const audioPlayerContainer = document.createElement('div'); // Container for potential styling
-    audioPlayerContainer.style.marginTop = '10px';
-
     const audioPlayer = document.createElement('audio');
-    audioPlayer.controls = true;
+    audioPlayer.controls = true; // This enables the browser's default player controls, INCLUDING a play button.
     audioPlayer.src = report.audioURL;
-    audioPlayer.style.width = '100%'; // Make the player responsive
+    // Set a max-width to prevent the audio player from becoming too wide in the flex layout,
+    // allowing the homework link to be visible "next to" it. Adjust as needed.
+    audioPlayer.style.maxWidth = '300px';
+    // You could also use flex-grow if you want it to take more space: audioPlayer.style.flex = '1';
 
     // Fallback message for browsers that don't support the audio element
     const unsupportedMessage = document.createTextNode('Your browser does not support the audio element.');
     audioPlayer.appendChild(unsupportedMessage);
     
-    audioPlayerContainer.appendChild(audioPlayer);
-    timelineContent.appendChild(audioPlayerContainer);
+    mediaActionsContainer.appendChild(audioPlayer);
+    contentAddedToMediaActions = true;
+  }
+
+  // Only add the container to the timeline if it has content
+  if (contentAddedToMediaActions) {
+    timelineContent.appendChild(mediaActionsContainer);
   }
 
   // Add processed data
