@@ -219,61 +219,52 @@ body > div {
 /* audio player */
 
 .custom-audio-player {
-  width: 100%; /* Or a specific width like 300px */
-  max-width: 350px; /* Overrides the inline style if you remove it from JS */
-  height: 50px; /* Adjust as needed */
-  border-radius: 25px; /* Rounded corners for the player */
-  border: 1px solid #ccc; /* A light border */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* A subtle shadow */
-  margin-top: 10px; /* Space above the player */
-  margin-bottom: 10px; /* Space below the player */
-  background-color: #f0f0f0; /* A light background for the player */
+  display: block; /* Ensure it behaves as a block element */
+  width: 100%;    /* Makes the player take the full width of its container */
+  max-width: 320px; /* A good maximum width for mobile, prevents it from being too wide.
+                       Adjust as needed. This replaces the inline style in your JS. */
+  height: 40px;     /* A common, neat height for audio controls. */
+  border-radius: 20px; /* Gives it a modern, softer "pill" shape. */
+  border: 1px solid #dde1e6; /* A very light, subtle border. */
+  background-color: #f8f9fa; /* A light, neutral background for the player itself. */
+  box-shadow: none; /* Removes any default shadow for a flatter, more integrated look. */
+  margin-top: 8px;  /* A little space above the player. */
+  margin-bottom: 8px; /* A little space below the player. */
+  overflow: hidden; /* Helps contain the browser's default styling. */
 }
 
-/*
-  Styling specific parts of the audio player (pseudo-elements)
-  has limited and inconsistent browser support.
-  The following are common examples but might not work perfectly everywhere.
-*/
-
-/* For WebKit browsers (Chrome, Safari, Edge Chromium) */
+/* Styling for WebKit-based browsers (Chrome, Safari, Edge) */
 .custom-audio-player::-webkit-media-controls-panel {
-  background-color: #e0e0e0; /* Background of the control panel */
-  border-radius: 25px;
-  color: #333; /* Color of icons and text (might not be effective) */
+  background-color: #f0f2f5; /* Slightly different light background for the control strip. */
+  border-radius: 20px; /* Match the outer element's border-radius. */
+  /* Trying to influence icon/text color within the panel: */
+  color: #333; /* This might affect some text elements if the browser allows. */
 }
 
 .custom-audio-player::-webkit-media-controls-play-button {
-  background-color: #4CAF50; /* Green play button */
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.custom-audio-player::-webkit-media-controls-play-button:hover {
-  background-color: #45a049; /* Darker green on hover */
-}
-
-.custom-audio-player::-webkit-media-controls-volume-slider {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 0 5px;
+  /* You can try to influence the play button, e.g., background or border-radius.
+     Often, the browser will use its own icon. */
+  /* Example: background-color: #e0e0e0; */
+  /* border-radius: 50%; */
 }
 
 .custom-audio-player::-webkit-media-controls-current-time-display,
 .custom-audio-player::-webkit-media-controls-time-remaining-display {
-  color: #333; /* Color of the time text */
-  font-size: 14px;
-  padding: 0 5px;
+  color: #454f5b; /* A muted color for the time text. */
+  font-size: 12px; /* Make the time text a bit smaller. */
+  padding: 0 5px; /* Adjust spacing around time text if needed. */
 }
 
-/* For Firefox (limited styling capabilities) */
-/* Firefox does not offer as much direct control via CSS pseudo-elements for the audio player parts */
-/* You might need to wrap the audio element in a div and style the div,
-   or rely on JavaScript for deeper customization if these don't work. */
+.custom-audio-player::-webkit-media-controls-timeline { /* The seek bar */
+  background-color: #d0d3d6; /* A slightly darker track for the seek bar. */
+  border-radius: 6px;
+  margin: 0 8px; /* Give it some horizontal margin. */
+}
 
-.custom-audio-player {
-  /* Firefox might respect general container styles better */
-  padding: 5px; /* Add some internal padding if needed */
+.custom-audio-player::-webkit-media-controls-volume-slider {
+  background-color: #d0d3d6; /* Track for the volume slider. */
+  border-radius: 6px;
+  margin: 0 5px 0 0; /* Adjust margins if needed */
 }
 
 /* Images */
