@@ -9,7 +9,7 @@ import admin from 'firebase-admin';
 // Debugging logs for environment variables and bucket name
 console.log('[openaiTTS - Debug] Raw FIREBASE_PROJECT_ID from env:', process.env.FIREBASE_PROJECT_ID);
 
-const GCS_BUCKET_NAME = `${process.env.FIREBASE_PROJECT_ID}.appspot.com`;
+const GCS_BUCKET_NAME = `${process.env.FIREBASE_PROJECT_ID}.firebasestorage.app`; 
 console.log('[openaiTTS - Debug] Constructed GCS_BUCKET_NAME:', GCS_BUCKET_NAME);
 
 const serviceAccount = {
