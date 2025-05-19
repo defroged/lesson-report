@@ -5,7 +5,12 @@ import admin from 'firebase-admin';
 // --- Firebase Admin SDK Initialization ---
 // This uses the environment variables: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY
 // Your Vercel environment variables should be set up for these.
-const GCS_BUCKET_NAME = `${process.env.FIREBASE_PROJECT_ID}.appspot.com`; // Default Firebase Storage bucket name convention
+
+// Debugging logs for environment variables and bucket name
+console.log('[openaiTTS - Debug] Raw FIREBASE_PROJECT_ID from env:', process.env.FIREBASE_PROJECT_ID);
+
+const GCS_BUCKET_NAME = `${process.env.FIREBASE_PROJECT_ID}.appspot.com`;
+console.log('[openaiTTS - Debug] Constructed GCS_BUCKET_NAME:', GCS_BUCKET_NAME);
 
 const serviceAccount = {
   projectId: process.env.FIREBASE_PROJECT_ID,
@@ -21,11 +26,10 @@ if (!admin.apps.length) {
       credential: admin.credential.cert(serviceAccount),
       storageBucket: GCS_BUCKET_NAME,
     });
-    console.log('[openaiTTS - FirebaseAdmin] Initialized successfully.');
+    console.log(`[openaiTTS - FirebaseAdmin] Initialized successfully for bucket: ${GCS_BUCKET_NAME}`);
   } catch (error) {
-    console.error('[openaiTTS - FirebaseAdmin] Error initializing:', error.message);
+    console.error(`[openaiTTS - FirebaseAdmin] Error initializing for bucket ${GCS_BUCKET_NAME}:`, error.message);
     // This is a critical error if Firebase is needed.
-    // The function might still attempt to run but Firebase operations will fail.
   }
 }
 // --- End Firebase Admin SDK Initialization ---
