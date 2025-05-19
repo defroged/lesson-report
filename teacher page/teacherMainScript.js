@@ -21,6 +21,8 @@ const classSelect = document.getElementById('classSelect');
 const classPictures = document.getElementById('classPictures');
 const lessonContents = document.getElementById('lessonContents');
 const submitBtn = document.getElementById('submitBtn');
+const homeworkURLInput = document.getElementById('homeworkURLInput'); // Keep this if it wasn't already global
+const audioURLInput = document.getElementById('audioURLInput'); // Added reference for audio URL input
 
 // Steps
 const step1 = document.getElementById('step1');
@@ -86,6 +88,7 @@ submitBtn.addEventListener('click', async () => {
     const selectedTeacher = teacherSelect.value;
     const selectedClass = classSelect.value;
     const homeworkURL = homeworkURLInput.value.trim();
+    const audioURL = audioURLInput.value.trim(); // Get the audio URL
 
     if (!selectedEventValue || !selectedClass) {
       alert("Please select an event and class.");
@@ -158,6 +161,7 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
       date: timestamp,
       classPictures: uploadedPictureURLs,
       homeworkURL: homeworkURL,
+      audioURL: audioURL, // Added audioURL to Firestore document
       processedData: {
         activities: [],
         grammar: [],

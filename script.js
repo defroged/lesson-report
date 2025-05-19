@@ -148,7 +148,27 @@ function createTimelineItem(report) {
     homeworkLink.href = report.homeworkURL;
     homeworkLink.textContent = '今日の宿題';
     homeworkLink.target = '_blank';
+    homeworkLink.style.display = 'block'; // Ensure it's a block for consistent layout
+    homeworkLink.style.marginBottom = '10px'; // Add some space below if both URL and audio exist
     timelineContent.appendChild(homeworkLink);
+  }
+
+  // Display audio player if audioURL exists
+  if (report.audioURL && report.audioURL.trim() !== '') {
+    const audioPlayerContainer = document.createElement('div'); // Container for potential styling
+    audioPlayerContainer.style.marginTop = '10px';
+
+    const audioPlayer = document.createElement('audio');
+    audioPlayer.controls = true;
+    audioPlayer.src = report.audioURL;
+    audioPlayer.style.width = '100%'; // Make the player responsive
+
+    // Fallback message for browsers that don't support the audio element
+    const unsupportedMessage = document.createTextNode('Your browser does not support the audio element.');
+    audioPlayer.appendChild(unsupportedMessage);
+    
+    audioPlayerContainer.appendChild(audioPlayer);
+    timelineContent.appendChild(audioPlayerContainer);
   }
 
   // Add processed data
@@ -201,7 +221,7 @@ function createTimelineItem(report) {
     appendSection(timelineContent, 'フレーズ＆文', processedData.phrasesAndSentences, 'phrases-label');
   }
   if (processedData.vocabulary) {
-    appendSection(timelineContent, 'ことば', processedData.vocabulary, 'vocabulary-label');
+    appendSection(timelineContent, '単語', processedData.vocabulary, 'vocabulary-label');
   }
 
   if (isMaster && processedData.hidden && processedData.hidden.length > 0) {
