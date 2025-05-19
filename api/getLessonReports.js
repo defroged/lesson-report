@@ -63,6 +63,7 @@ export default async function handler(req, res) {
         date: data.date.toDate().toLocaleDateString(),
         classPictures: data.classPictures || [],
         homeworkURL: data.homeworkURL || '',
+        audioURL: data.audioURL || '', // <<< ADD THIS LINE
         processedData: data.processedData || {},
       };
     });
