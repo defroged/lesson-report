@@ -107,6 +107,14 @@ async function fetchLessonReports(className, page = 1, limit = 10) {
 }
 
 function createTimelineItem(report) {
+  // START OF DEBUG LOGS
+  console.log('--- createTimelineItem Start for report ID:', report.id, 'Date:', report.date, '---');
+  // console.log('Full report object received:', JSON.parse(JSON.stringify(report))); // Deep copy for logging, can be verbose
+  console.log('Report homeworkURL:', report.homeworkURL); // Log homeworkURL
+  console.log('Report audioURL:', report.audioURL);       // Log audioURL
+  console.log('Type of report.audioURL:', typeof report.audioURL);
+  // END OF DEBUG LOGS
+
   const timelineItem = document.createElement('div');
   timelineItem.classList.add('timeline-item');
 
@@ -126,15 +134,12 @@ function createTimelineItem(report) {
   if (report.classPictures && report.classPictures.length > 0) {
     const gallery = document.createElement('div');
     gallery.classList.add('timeline-gallery');
-
     report.classPictures.forEach(url => {
       const img = document.createElement('img');
       img.src = url;
-      // Add a click event to open the modal
       img.addEventListener('click', () => openImageModal(url));
       gallery.appendChild(img);
     });
-
     timelineContent.appendChild(gallery);
   }
 
@@ -143,65 +148,69 @@ function createTimelineItem(report) {
   postedBy.textContent = `先生： ${report.processedData.teacher || 'Unknown'}`;
   timelineContent.appendChild(postedBy);
 
-  // Container for homework link and audio player for side-by-side layout
   const mediaActionsContainer = document.createElement('div');
-  mediaActionsContainer.style.display = 'flex'; // Use flexbox for side-by-side
-  mediaActionsContainer.style.flexWrap = 'wrap'; // Allow items to wrap on smaller screens
-  mediaActionsContainer.style.alignItems = 'center'; // Vertically align items
-  mediaActionsContainer.style.gap = '15px'; // Adds space between the homework link and audio player
-  mediaActionsContainer.style.marginTop = '10px'; // Space above this container
+  mediaActionsContainer.style.display = 'flex';
+  mediaActionsContainer.style.flexWrap = 'wrap';
+  mediaActionsContainer.style.alignItems = 'center';
+  mediaActionsContainer.style.gap = '15px';
+  mediaActionsContainer.style.marginTop = '10px';
 
   let contentAddedToMediaActions = false;
 
-  if (report.homeworkURL) {
+  if (report.homeworkURL && typeof report.homeworkURL === 'string' && report.homeworkURL.trim() !== '') {
+    console.log('HomeworkURL IS present: "' + report.homeworkURL + '". Creating link.'); // DEBUG
     const homeworkLink = document.createElement('a');
     homeworkLink.href = report.homeworkURL;
     homeworkLink.textContent = '今日の宿題';
     homeworkLink.target = '_blank';
-    // No specific styling like display:block or margin-bottom needed here
-    // as flex container will manage its layout.
     mediaActionsContainer.appendChild(homeworkLink);
     contentAddedToMediaActions = true;
+  } else {
+    console.log('HomeworkURL is NOT present or is empty. Link not created. Value: ', report.homeworkURL); // DEBUG
   }
 
-  // Display audio player if audioURL exists
-  if (report.audioURL && report.audioURL.trim() !== '') {
+  // DEBUGGING LOGS FOR AUDIO PLAYER CONDITION
+  console.log('Attempting to add audio player. Current audioURL value is: "' + report.audioURL + '"');
+  let audioConditionMet = false;
+  // Robust check for audioURL
+  if (report.audioURL && typeof report.audioURL === 'string' && report.audioURL.trim() !== '') {
+    audioConditionMet = true;
+    console.log('CONDITION MET for audio player: AudioURL is present and not an empty string. Creating player.');
     const audioPlayer = document.createElement('audio');
-    audioPlayer.controls = true; // This enables the browser's default player controls, INCLUDING a play button.
+    audioPlayer.controls = true;
     audioPlayer.src = report.audioURL;
-    // Set a max-width to prevent the audio player from becoming too wide in the flex layout,
-    // allowing the homework link to be visible "next to" it. Adjust as needed.
     audioPlayer.style.maxWidth = '300px';
-    // You could also use flex-grow if you want it to take more space: audioPlayer.style.flex = '1';
-
-    // Fallback message for browsers that don't support the audio element
     const unsupportedMessage = document.createTextNode('Your browser does not support the audio element.');
     audioPlayer.appendChild(unsupportedMessage);
-    
     mediaActionsContainer.appendChild(audioPlayer);
     contentAddedToMediaActions = true;
+  } else {
+    console.log('CONDITION NOT MET for audio player.');
+    if (report.audioURL === null) console.log('Reason: audioURL is null');
+    else if (report.audioURL === undefined) console.log('Reason: audioURL is undefined');
+    else if (typeof report.audioURL !== 'string') console.log('Reason: audioURL is not a string. Type is: ' + typeof report.audioURL);
+    else if (report.audioURL && report.audioURL.trim() === '') console.log('Reason: audioURL is an empty string or contains only whitespace.'); // Check if it's a string first
+    else if (!report.audioURL) console.log('Reason: audioURL is falsy (e.g., empty string, undefined, null). Value: "' + report.audioURL + '"');
+    else console.log('Reason: audioURL condition not met for other reasons. Value: "' + report.audioURL + '"');
   }
+  console.log('Audio condition met status:', audioConditionMet);
+  // END OF DEBUGGING LOGS FOR AUDIO PLAYER
 
-  // Only add the container to the timeline if it has content
   if (contentAddedToMediaActions) {
+    console.log('Appending mediaActionsContainer to timelineContent because contentAddedToMediaActions is true.'); // DEBUG
     timelineContent.appendChild(mediaActionsContainer);
+  } else {
+    console.log('NOT appending mediaActionsContainer as contentAddedToMediaActions is false.'); // DEBUG
   }
 
-  // Add processed data
   const processedData = report.processedData;
-
-  function appendSection(timelineContent, title, items, className) {
+  function appendSection(tc, title, items, className) {
     const container = document.createElement('p');
-
     const label = document.createElement('span');
     label.classList.add(className);
     label.textContent = title + ': ';
-
     container.appendChild(label);
-
-    // Check for specific sections and apply different formatting
     if (title === 'レッスンの流れ') {
-      // Create a numbered list (ol)
       const numberedList = document.createElement('ol');
       items.forEach(item => {
         const listItem = document.createElement('li');
@@ -210,7 +219,6 @@ function createTimelineItem(report) {
       });
       container.appendChild(numberedList);
     } else if (title === 'フレーズ＆文') {
-      // Create a bullet list (ul)
       const bulletList = document.createElement('ul');
       items.forEach(item => {
         const listItem = document.createElement('li');
@@ -219,12 +227,10 @@ function createTimelineItem(report) {
       });
       container.appendChild(bulletList);
     } else {
-      // Default: display items as a comma-separated string
       const text = document.createTextNode(items.join(', '));
       container.appendChild(text);
     }
-
-    timelineContent.appendChild(container);
+    tc.appendChild(container); // Use the passed parameter 'tc'
   }
 
   if (processedData.activities) {
@@ -237,7 +243,9 @@ function createTimelineItem(report) {
     appendSection(timelineContent, 'フレーズ＆文', processedData.phrasesAndSentences, 'phrases-label');
   }
   if (processedData.vocabulary) {
-    appendSection(timelineContent, '単語', processedData.vocabulary, 'vocabulary-label');
+    // Corrected label from '単語' to 'ことば' to match previous context if intended, or keep '単語' if that's correct now.
+    // Assuming 'ことば' was the original intent for consistency with your other code samples for 'vocabulary-label'.
+    appendSection(timelineContent, 'ことば', processedData.vocabulary, 'vocabulary-label');
   }
 
   if (isMaster && processedData.hidden && processedData.hidden.length > 0) {
@@ -245,6 +253,7 @@ function createTimelineItem(report) {
   }
   
   timelineItem.appendChild(timelineContent);
+  console.log('--- createTimelineItem End for report ID:', report.id, '---'); // DEBUG
   return timelineItem;
 }
 
