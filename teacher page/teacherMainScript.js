@@ -73,9 +73,6 @@ lessonContents.addEventListener('change', () => {
 });
 
 // On clicking submit
-const homeworkURLInput = document.getElementById('homeworkURLInput');
-
-// On clicking submit
 submitBtn.addEventListener('click', async () => {
   const loadingOverlay = document.getElementById('loadingOverlay');
 
