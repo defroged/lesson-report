@@ -101,42 +101,42 @@ submitBtn.addEventListener('click', async () => {
   const loadingOverlay = document.getElementById('loadingOverlay');
 
   try {
-    // Show loading overlay
-    loadingOverlay.style.display = 'flex';
-
     const classEventsSelect = document.getElementById('classEventsSelect');
-    const selectedEventValue = classEventsSelect.value; 
+    const selectedEventValue = classEventsSelect.value;
     const selectedTeacher = teacherSelect.value;
     const selectedClass = classSelect.value;
     const homeworkURL = homeworkURLInput.value.trim();
-    const audioURL = audioURLInput.value.trim(); // Get the audio URL
+    const audioURL = audioURLInput.value.trim();
 
+    // 1. Basic Validation using SweetAlert
     if (!selectedEventValue || !selectedClass) {
-      alert("Please select an event and class.");
-      loadingOverlay.style.display = 'none'; // Hide loading overlay on error
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Information',
+        text: 'Please select both an event and a class.'
+      });
       return;
     }
 
+    // Show loading overlay
+    loadingOverlay.style.display = 'flex';
+
     // Parse className and date
     const parts = selectedEventValue.trim().split(' ');
-    const dateStr = parts[parts.length - 1]; 
-    const className = parts.slice(0, parts.length - 1).join(' '); 
+    const dateStr = parts[parts.length - 1];
+    const className = parts.slice(0, parts.length - 1).join(' ');
 
     // Convert YYYY-MM-DD to Timestamp
     const [year, month, day] = dateStr.split('-').map(Number);
-const classDate = new Date(year, month - 1, day);
+    const classDate = new Date(year, month - 1, day);
+    // Set to noon to avoid timezone shifting
+    classDate.setHours(12, 0, 0, 0);
+    const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
 
-// Set the time to noon (12:00) to avoid timezone shifting issues
-classDate.setHours(12, 0, 0, 0);
-
-const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
-
-
-    // Upload class pictures (Iterate over our array)
+    // 2. Upload Class Pictures
     const uploadedPictureURLs = [];
     for (let i = 0; i < allClassPictures.length; i++) {
       const file = allClassPictures[i];
-      // Add a timestamp to filename to ensure uniqueness if multiple files have same name
       const uniqueName = Date.now() + '_' + file.name;
       const fileRef = storage.ref(`classPictures/${className}/${dateStr}/${uniqueName}`);
       await fileRef.put(file);
@@ -144,10 +144,10 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
       uploadedPictureURLs.push(url);
     }
 
-    // Upload lessonContents to Cloudinary (Iterate over our array)
+    // 3. Upload Lesson Contents to Cloudinary
     const lessonContentURLs = [];
-    const cloudName = "dzo0vucxp"; 
-    const uploadPreset = "pxqxa22g"; 
+    const cloudName = "dzo0vucxp";
+    const uploadPreset = "pxqxa22g";
 
     for (let i = 0; i < allLessonContents.length; i++) {
       const file = allLessonContents[i];
@@ -161,36 +161,35 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
       });
 
       if (!response.ok) {
-        console.error('Error uploading to Cloudinary:', await response.text());
-        alert('Error uploading lesson content image.');
-        loadingOverlay.style.display = 'none'; 
-        return;
+        const errText = await response.text();
+        throw new Error(`Cloudinary Upload Failed: ${errText}`);
       }
 
       const data = await response.json();
       lessonContentURLs.push(data.secure_url);
     }
 
-    // Create the lesson report document without processedData first
+    // 4. Create Firestore Document
     const docRef = db.collection('classes')
-                     .doc(className)
-                     .collection('lessonReports')
-                     .doc(dateStr);
+      .doc(className)
+      .collection('lessonReports')
+      .doc(dateStr);
 
     await docRef.set({
       date: timestamp,
       classPictures: uploadedPictureURLs,
       homeworkURL: homeworkURL,
-      audioURL: audioURL, // Added audioURL to Firestore document
+      audioURL: audioURL,
       processedData: {
         activities: [],
         grammar: [],
         phrasesAndSentences: [],
         vocabulary: [],
-         hidden: [] // Initialize the hidden array
+        hidden: []
       }
     }, { merge: true });
 
+    // 5. AI Extraction
     const response = await fetch('/api/extractLessonDataFromImages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -198,27 +197,40 @@ const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
     });
 
     if (!response.ok) {
-      console.error('Error extracting data:', await response.text());
-      alert('Error extracting data from images.');
-      loadingOverlay.style.display = 'none'; // Hide loading overlay on error
-      return;
+      const errText = await response.text();
+      throw new Error(`Data Extraction Failed: ${errText}`);
     }
 
-    const { processedData, hidden } = await response.json(); // Extract hidden data as well
-    processedData.teacher = selectedTeacher; // Add the selected teacher name here
-    processedData.hidden = hidden || []; // Add the hidden array to processedData, default to empty if not provided
-    
-    // Update the Firestore document with processedData, including the teacher and hidden content
+    const { processedData, hidden } = await response.json();
+    processedData.teacher = selectedTeacher;
+    processedData.hidden = hidden || [];
+
     await docRef.update({ processedData });
 
-    alert('Lesson Report submitted and processedData extracted successfully!');
+    // 6. Success Handling with Timer and Refresh
+    loadingOverlay.style.display = 'none'; // Hide loading before success alert
+    
+    await Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Lesson Report submitted successfully. Refreshing page...',
+      timer: 3000, // 3 seconds
+      timerProgressBar: true,
+      willClose: () => {
+        window.location.reload();
+      }
+    });
+
   } catch (error) {
     console.error('Error submitting data:', error);
-    alert('Error submitting data. Check console for details.');
-  } finally {
-    // Hide loading overlay after completion (success or error)
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    loadingOverlay.style.display = 'none';
+    loadingOverlay.style.display = 'none'; // Ensure overlay is hidden on error
+    
+    // Detailed Error Alert
+    Swal.fire({
+      icon: 'error',
+      title: 'Submission Failed',
+      text: error.message || 'An unexpected error occurred. Please try again.'
+    });
   }
 });
 
@@ -265,7 +277,11 @@ if (nextFromStep1) {
       step1.classList.remove('active');
       step2.classList.add('active');
     } else {
-      alert('Please select a teacher.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Step 1 Incomplete',
+        text: 'Please select a teacher.'
+      });
     }
   });
 }
@@ -277,7 +293,11 @@ if (nextFromStep2) {
       step2.classList.remove('active');
       step3.classList.add('active');
     } else {
-      alert('Please select a class.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Step 2 Incomplete',
+        text: 'Please select a class.'
+      });
     }
   });
 }
@@ -290,7 +310,11 @@ if (nextFromStep3) {
       step3.classList.remove('active');
       step4.classList.add('active');
     } else {
-      alert('Please select an event.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Step 3 Incomplete',
+        text: 'Please select an event.'
+      });
     }
   });
 }
@@ -303,7 +327,11 @@ if (nextFromStep4) {
       step4.classList.remove('active');
       step5.classList.add('active');
     } else {
-      alert('Please upload lesson contents.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Step 4 Incomplete',
+        text: 'Please upload at least one lesson content image.'
+      });
     }
   });
 }
@@ -381,3 +409,5 @@ async function populateClassEvents(selectedClass) {
     console.error('Error fetching class events:', error);
   }
 }
+
+
