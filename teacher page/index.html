@@ -1,3 +1,5 @@
+<!--* index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,16 +39,19 @@
     <option value="">-- Select an Event --</option>
   </select>
   <br>
-  <h2>Upload Class Pictures</h2> 
-  <input type="file" id="classPictures" accept="image/*" multiple />
+  <h2>Upload Class Pictures</h2>
+  <input type="file" id="classPicturesInput" accept="image/*" multiple style="margin-bottom: 10px;" />
+  <div id="classPicturesPreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;"></div>
+  
   <button id="backToStep2" class="backBtn">Back</button>
   <button id="nextFromStep3" class="nextBtn">Next</button>
 </div>
 
-<!-- Step 4: Upload Lesson Contents -->
 <div class="step" id="step4">
   <h2>Step 4: Upload Lesson Contents</h2>
-  <input type="file" id="lessonContents" accept="image/*" multiple />
+  <input type="file" id="lessonContentsInput" accept="image/*" multiple style="margin-bottom: 10px;" />
+  <div id="lessonContentsPreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;"></div>
+  
   <button id="backToStep3" class="backBtn">Back</button>
   <button id="nextFromStep4" class="nextBtn">Next</button>
 </div>
@@ -75,3 +80,5 @@
 <script src="teacher page/teacherMainScript.js"></script>
 </body>
 </html>
+
+

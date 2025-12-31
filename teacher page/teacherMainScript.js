@@ -18,11 +18,16 @@ const storage = firebase.storage();
 // References to elements
 const teacherSelect = document.getElementById('teacherSelect');
 const classSelect = document.getElementById('classSelect');
-const classPictures = document.getElementById('classPictures');
-const lessonContents = document.getElementById('lessonContents');
+// Note: We renamed these IDs in HTML to '...Input'
+const classPicturesInput = document.getElementById('classPicturesInput');
+const lessonContentsInput = document.getElementById('lessonContentsInput');
 const submitBtn = document.getElementById('submitBtn');
-const homeworkURLInput = document.getElementById('homeworkURLInput'); // Keep this if it wasn't already global
-const audioURLInput = document.getElementById('audioURLInput'); // Added reference for audio URL input
+const homeworkURLInput = document.getElementById('homeworkURLInput'); 
+const audioURLInput = document.getElementById('audioURLInput'); 
+
+// Global arrays to store accumulated files
+let allClassPictures = [];
+let allLessonContents = [];
 
 // Steps
 const step1 = document.getElementById('step1');
@@ -56,20 +61,39 @@ classSelect.addEventListener('change', async () => {
   }
 });
 
-// When class pictures are selected, show step 4
-classPictures.addEventListener('change', () => {
-  if (classPictures.files.length > 0) {
-    step3.classList.remove('active');
-    step4.classList.add('active');
-  }
+// Helper function to handle file accumulation and preview
+function handleFileSelect(event, fileArray, previewContainerId) {
+  const files = Array.from(event.target.files);
+  const previewContainer = document.getElementById(previewContainerId);
+  
+  files.forEach(file => {
+    // Add to our global array
+    fileArray.push(file);
+
+    // Create a thumbnail
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.style.width = '80px';
+    img.style.height = '80px';
+    img.style.objectFit = 'cover';
+    img.style.borderRadius = '8px';
+    img.style.border = '1px solid #ccc';
+    previewContainer.appendChild(img);
+  });
+
+  // Clear the input so the same file can be selected again if needed, 
+  // or to prepare for the next photo snap
+  event.target.value = ''; 
+}
+
+// Event Listeners for file inputs
+classPicturesInput.addEventListener('change', (e) => {
+  handleFileSelect(e, allClassPictures, 'classPicturesPreview');
+  // We do NOT auto-advance anymore, user must click Next
 });
 
-// When lesson contents are selected, show step 5
-lessonContents.addEventListener('change', () => {
-  if (lessonContents.files.length > 0) {
-    step4.classList.remove('active');
-    step5.classList.add('active');
-  }
+lessonContentsInput.addEventListener('change', (e) => {
+  handleFileSelect(e, allLessonContents, 'lessonContentsPreview');
 });
 
 // On clicking submit
@@ -108,26 +132,25 @@ classDate.setHours(12, 0, 0, 0);
 const timestamp = firebase.firestore.Timestamp.fromDate(classDate);
 
 
-    // Upload class pictures
-    const pictureFiles = classPictures.files;
+    // Upload class pictures (Iterate over our array)
     const uploadedPictureURLs = [];
-    for (let i = 0; i < pictureFiles.length; i++) {
-      const file = pictureFiles[i];
-      const fileRef = storage.ref(`classPictures/${className}/${dateStr}/${file.name}`);
+    for (let i = 0; i < allClassPictures.length; i++) {
+      const file = allClassPictures[i];
+      // Add a timestamp to filename to ensure uniqueness if multiple files have same name
+      const uniqueName = Date.now() + '_' + file.name;
+      const fileRef = storage.ref(`classPictures/${className}/${dateStr}/${uniqueName}`);
       await fileRef.put(file);
       const url = await fileRef.getDownloadURL();
       uploadedPictureURLs.push(url);
     }
 
-    // Upload lessonContents directly to Cloudinary
-    const lessonFiles = lessonContents.files;
+    // Upload lessonContents to Cloudinary (Iterate over our array)
     const lessonContentURLs = [];
-
     const cloudName = "dzo0vucxp"; 
     const uploadPreset = "pxqxa22g"; 
 
-    for (let i = 0; i < lessonFiles.length; i++) {
-      const file = lessonFiles[i];
+    for (let i = 0; i < allLessonContents.length; i++) {
+      const file = allLessonContents[i];
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', uploadPreset);
@@ -263,7 +286,6 @@ const nextFromStep3 = document.getElementById('nextFromStep3');
 if (nextFromStep3) {
   nextFromStep3.addEventListener('click', () => {
     const classEventsSelect = document.getElementById('classEventsSelect');
-    // Only require the event to be selected; pictures are optional
     if (classEventsSelect.value !== '') {
       step3.classList.remove('active');
       step4.classList.add('active');
@@ -276,8 +298,8 @@ if (nextFromStep3) {
 const nextFromStep4 = document.getElementById('nextFromStep4');
 if (nextFromStep4) {
   nextFromStep4.addEventListener('click', () => {
-    // Check if lessonContents are already selected
-    if (lessonContents.files.length > 0) {
+    // Check our array instead of the input.files
+    if (allLessonContents.length > 0) {
       step4.classList.remove('active');
       step5.classList.add('active');
     } else {
